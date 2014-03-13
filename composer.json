@@ -1,0 +1,12 @@
+{
+    "require": {
+        "guzzle/guzzle": "~3.7",
+        "slim/slim": "2.*"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "reClick\\": "src"
+        }
+    }
+}
