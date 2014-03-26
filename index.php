@@ -6,7 +6,7 @@ use reClick\GCM\GCM;
 
 $app = new \Slim\Slim();
 
-$app->post('/', function () use ($app) {
+$app->post('/', function() use ($app) {
 
     $regId = $app->request->post('regId');
 
@@ -26,6 +26,13 @@ $app->post('/', function () use ($app) {
     $response = $gcm->sendMessage();
 
     print $response;
+});
+
+$app->get('/', function() use ($app) {
+    $db = new \reClick\Framework\Db();
+    $res = $db->query('select username from players where id = :id', ['id' => 1]);
+//    $res = $db->query('show tables');
+    echo'<pre>';print_r($res);exit;
 });
 
 $app->run();
