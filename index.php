@@ -29,10 +29,7 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-    $db = new \reClick\Framework\Db();
-    $res = $db->query('select username from players where id = :id', ['id' => 1]);
-//    $res = $db->query('show tables');
-    echo'<pre>';print_r($res);exit;
+
 });
 
 $app->run();

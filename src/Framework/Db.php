@@ -7,11 +7,6 @@ use reClick\Framework\Configs\Config;
 class Db {
 
     /**
-     * Constructor
-     */
-    public function __construct() {}
-
-    /**
      * @param string $queryString
      * @param array $values
      * @return mixed

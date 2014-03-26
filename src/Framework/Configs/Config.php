@@ -12,11 +12,6 @@ class Config {
     ];
 
     /**
-     * Constructor
-     */
-    public function __construct() {}
-
-    /**
      * @return DbConfig
      */
     public function db() {
