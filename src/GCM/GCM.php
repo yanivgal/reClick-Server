@@ -3,6 +3,8 @@
 namespace reClick\GCM;
 
 use Guzzle\Http\Client;
+use reClick\Framework\Configs\Config;
+use reClick\Framework\Configs\GcmConfig;
 
 class GCM {
 
@@ -33,7 +35,9 @@ class GCM {
      */
     private $response;
 
-    public function __construct($apiKey) {
+    public function __construct() {
+        $gcmConfig = (new Config())->gcm();
+        $apiKey = $gcmConfig->apiKey();
         $this->apiKey = $apiKey;
         $this->requestHeaders = new RequestHeaders($apiKey);
         $this->message = new Message();

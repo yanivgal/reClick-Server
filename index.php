@@ -15,8 +15,7 @@ $app->post('/', function() use ($app) {
         return;
     }
 
-    $apiKey = 'AIzaSyCwEmCaqZzIkD3KLm57IJ3ZarIeo-6Zaxg';
-    $gcm = new GCM($apiKey);
+    $gcm = new GCM();
 
     $gcm->message()
         ->addData('opponent_name', 'Yaniv Gal')

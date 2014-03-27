@@ -1,45 +1,57 @@
 <?php
 
-namespace reClick\Players\Models;
+namespace reClick\Models;
 
 use reClick\Framework\Db;
 
-class PlayerModel {
+class BaseModel {
 
     /**
      * @var \reClick\Framework\Db
      */
-    private $db;
+    protected $db;
 
     /**
      * @var string table name
      */
-    private $table;
+    protected $table;
 
     /**
      * Constructor
      */
     public function __construct() {
         $this->db = new Db();
-        $this->table = 'players';
     }
 
     /**
+     * Gets one column where id = $id
+     *
      * @param int $id
      * @param string $column
      * @return string
      */
     public function getOne($id, $column) {
-        return '';
+        return $this->db->select(
+            $this->table,
+            [$column],
+            ['id' => $id]
+        )->fetchValue();
     }
 
     /**
+     * Sets one column where id = $id
+     *
      * @param int $id
      * @param string $column
      * @param string $value
-     * @return string
+     * @return int number of effected rows
      */
     public function setOne($id, $column, $value) {
-        return '';
+        return $this->db->update(
+            $this->table,
+            [$column => $value],
+            ['id' => $id]
+        );
     }
+
 } 

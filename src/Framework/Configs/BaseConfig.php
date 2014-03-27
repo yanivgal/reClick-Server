@@ -2,7 +2,7 @@
 
 namespace reClick\Framework\Configs;
 
-abstract class ConfigBase {
+abstract class BaseConfig {
 
     /**
      * @var array $iniArr parsed ini file as array

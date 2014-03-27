@@ -2,57 +2,50 @@
 
 namespace reClick\Framework\Configs;
 
-class DbConfig extends ConfigBase{
+class DbConfig extends BaseConfig {
 
     /**
-     * Constructor
+     * Returns database driver name
      *
-     * @param array $iniArr parsed ini file as array
-     */
-    public function __construct(array $iniArr) {
-        parent::__construct($iniArr);
-    }
-
-    /**
      * @return string
      */
     public function driver() {
-        return $this->getValueFromParent('driver');
+        return parent::getValue('driver');
     }
 
     /**
+     * Returns database name
+     *
      * @return string
      */
     public function dbName() {
-        return $this->getValueFromParent('dbname');
+        return parent::getValue('dbname');
     }
 
     /**
+     * Returns database host name
+     *
      * @return string
      */
     public function host() {
-        return $this->getValueFromParent('host');
+        return parent::getValue('host');
     }
 
     /**
+     * Returns database username
+     *
      * @return string
      */
     public function username() {
-        return $this->getValueFromParent('username');
+        return parent::getValue('username');
     }
 
     /**
+     * Returns database password
+     *
      * @return string
      */
     public function password() {
-        return $this->getValueFromParent('password');
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     */
-    private function getValueFromParent($name) {
-        return parent::getValue($name);
+        return parent::getValue('password');
     }
 } 
