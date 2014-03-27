@@ -26,16 +26,30 @@ class Config {
         );
     }
 
+    /**
+     * Returns ini file's filename
+     *
+     * @param string $filename
+     * @return string
+     */
     private function getIniFile($filename) {
-        $iniArr = glob('*.ini');
+        return $this->getAllIniFiles()[$filename];
+    }
 
-        foreach ($iniArr as $key => $path) {
-            $info = pathinfo($path);
-            $iniArr[$info['filename']] = $path;
-            unset($iniArr[$key]);
+    /**
+     * Returns all ini files as array
+     *
+     * @return array
+     */
+    private function getAllIniFiles() {
+        $iniFiles = glob('*.ini');
+
+        foreach ($iniFiles as $key => $path) {
+            $iniFiles[pathinfo($path, PATHINFO_FILENAME)] = $path;
+            unset($iniFiles[$key]);
         }
 
-        return $iniArr[$filename];
+        return $iniFiles;
     }
 
     /**
