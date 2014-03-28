@@ -1,6 +1,8 @@
 <?php
 
-namespace reClick\Models;
+namespace reClick\Models\Players;
+
+use reClick\Models\BaseModel;
 
 class PlayerModel extends BaseModel {
 

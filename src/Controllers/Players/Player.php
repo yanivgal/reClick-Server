@@ -1,20 +1,11 @@
 <?php
 
-namespace reClick\Players;
+namespace reClick\Controllers\Players;
 
-use reClick\Models\PlayerModel;
+use reClick\Controllers\BaseController;
+use reClick\Models\Players\PlayerModel;
 
-class Player {
-
-    /**
-     * @var int player id
-     */
-    private $id;
-
-    /**
-     * @var \reClick\Models\PlayerModel
-     */
-    private $model;
+class Player extends BaseController {
 
     /**
      * Constructor
@@ -22,8 +13,8 @@ class Player {
      * @param int $id
      */
     public function __construct($id = null) {
+        parent::__construct($id);
         $this->model = new PlayerModel();
-        $this->id = isset($id) ? $id : null;
     }
 
     /**
@@ -49,15 +40,6 @@ class Player {
         );
 
         return $this;
-    }
-
-    /**
-     * Gets player's ID
-     *
-     * @return int
-     */
-    public function id() {
-        return $this->id;
     }
 
     /**
@@ -96,6 +78,12 @@ class Player {
         return $this->getSet('password', $password);
     }
 
+    /**
+     * Gets Sets player's nickname
+     *
+     * @param string $nickname
+     * @return int|string
+     */
     public function nickname($nickname = null) {
         return $this->getSet('nickname', $nickname);
     }
@@ -111,20 +99,11 @@ class Player {
     }
 
     /**
-     * Generic Getter/Setter
+     * Hash given password string using MD5 (message-digest) algorithm
      *
-     * @param string $column
-     * @param string $val
-     * @return int|string
+     * @param string $password
+     * @return string
      */
-    private function getSet($column, $val = null) {
-        if (isset($val)) {
-            return $this->model->setOne($this->id, $column, $val);
-        }
-
-        return $this->model->getOne($this->id,$column);
-    }
-
     private function hashPassword($password) {
         return md5($password);
     }
