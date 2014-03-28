@@ -30,7 +30,7 @@ class BaseModel {
      * @param string $column
      * @return string
      */
-    public function getOne($id, $column) {
+    protected  function getOne($id, $column) {
         return $this->db->select(
             $this->table,
             [$column],
@@ -46,12 +46,28 @@ class BaseModel {
      * @param string $value
      * @return int number of effected rows
      */
-    public function setOne($id, $column, $value) {
+    protected  function setOne($id, $column, $value) {
         return $this->db->update(
             $this->table,
             [$column => $value],
             ['id' => $id]
         );
+    }
+
+    /**
+     * Generic Getter/Setter
+     *
+     * @param int $id
+     * @param string $column
+     * @param string|null $val
+     * @return mixed
+     */
+    protected function getSet($id, $column, $val = null) {
+        if (isset($val)) {
+            return $this->model->setOne($id, $column, $val);
+        }
+
+        return $this->model->getOne($id,$column);
     }
 
 } 

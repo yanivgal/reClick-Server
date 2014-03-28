@@ -10,7 +10,7 @@ class Player extends BaseController {
     /**
      * Constructor
      *
-     * @param int $id
+     * @param int $id Player's ID
      */
     public function __construct($id = null) {
         parent::__construct($id);

@@ -33,19 +33,4 @@ class BaseController {
     public function id() {
         return $this->id;
     }
-
-    /**
-     * Generic Getter/Setter
-     *
-     * @param string $column
-     * @param string $val
-     * @return int|string
-     */
-    protected function getSet($column, $val = null) {
-        if (isset($val)) {
-            return $this->model->setOne($this->id, $column, $val);
-        }
-
-        return $this->model->getOne($this->id,$column);
-    }
 } 
