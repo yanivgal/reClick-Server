@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2014 at 07:18 PM
+-- Generation Time: Mar 28, 2014 at 07:08 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -27,11 +27,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `games`
 --
 
+DROP TABLE IF EXISTS `games`;
 CREATE TABLE IF NOT EXISTS `games` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `num_of_players` int(4) NOT NULL DEFAULT '0',
   `sequence` varchar(4096) DEFAULT NULL,
-  `whose_turn` int(4) DEFAULT NULL,
+  `turn` int(4) DEFAULT NULL,
+  `started` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -41,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `games` (
 -- Table structure for table `players`
 --
 
+DROP TABLE IF EXISTS `players`;
 CREATE TABLE IF NOT EXISTS `players` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(25) NOT NULL,
@@ -58,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `players` (
 -- Table structure for table `players_in_games`
 --
 
+DROP TABLE IF EXISTS `players_in_games`;
 CREATE TABLE IF NOT EXISTS `players_in_games` (
   `player_id` int(10) unsigned NOT NULL,
   `game_id` int(10) unsigned NOT NULL,
@@ -74,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `players_in_games` (
 -- Constraints for table `players_in_games`
 --
 ALTER TABLE `players_in_games`
-  ADD CONSTRAINT `fk_players_in_games_game_id` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_players_in_games_player_id` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON UPDATE CASCADE;
+ADD CONSTRAINT `fk_players_in_games_game_id` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`) ON UPDATE CASCADE,
+ADD CONSTRAINT `fk_players_in_games_player_id` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON UPDATE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
