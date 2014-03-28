@@ -7,6 +7,9 @@ use reClick\Models\Players\PlayerModel;
 
 class Player extends BaseController {
 
+    const HASH_PASSWORD = true;
+    const RAW_PASSWORD = false;
+
     /**
      * Constructor
      *
@@ -24,17 +27,23 @@ class Player extends BaseController {
      * @param string $password
      * @param string $nickname
      * @param string $gcmRegId
+     * @param bool $hashPassword
      * @return Player
      */
     public function create(
         $username,
         $password,
         $nickname,
-        $gcmRegId
+        $gcmRegId,
+        $hashPassword = false
     ) {
+        if ($hashPassword) {
+            $password = $this->hashPassword($password);
+        }
+
         $this->id = $this->model->create(
             $username,
-            $this->hashPassword($password),
+            $password,
             $nickname,
             $gcmRegId
         );
@@ -68,10 +77,11 @@ class Player extends BaseController {
      * Gets Sets player's password
      *
      * @param string $password
+     * @param bool $hashPassword
      * @return int|string
      */
-    public function password($password = null) {
-        if (isset($password)) {
+    public function password($password = null, $hashPassword = false) {
+        if (isset($password) && $hashPassword) {
             $password = $this->hashPassword($password);
         }
 
@@ -99,7 +109,7 @@ class Player extends BaseController {
     }
 
     /**
-     * Hash given password string using MD5 (message-digest) algorithm
+     * Hash a given password string using MD5 (message-digest) algorithm
      *
      * @param string $password
      * @return string
