@@ -6,7 +6,7 @@ use reClick\GCM\GCM;
 
 $app = new \Slim\Slim();
 
-$app->post('/', function () use ($app) {
+$app->post('/', function() use ($app) {
 
     $regId = $app->request->post('regId');
 
@@ -15,8 +15,7 @@ $app->post('/', function () use ($app) {
         return;
     }
 
-    $apiKey = 'AIzaSyCwEmCaqZzIkD3KLm57IJ3ZarIeo-6Zaxg';
-    $gcm = new GCM($apiKey);
+    $gcm = new GCM();
 
     $gcm->message()
         ->addData('opponent_name', 'Yaniv Gal')
@@ -26,6 +25,10 @@ $app->post('/', function () use ($app) {
     $response = $gcm->sendMessage();
 
     print $response;
+});
+
+$app->get('/', function() use ($app) {
+
 });
 
 $app->run();
