@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `turn` int(4) DEFAULT NULL,
   `started` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   FULLTEXT KEY `gcm_reg_id` (`gcm_reg_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
