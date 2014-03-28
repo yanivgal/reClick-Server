@@ -10,8 +10,6 @@ abstract class BaseConfig {
     private $iniArr;
 
     /**
-     * Constructor
-     *
      * @param array $iniArr parsed ini file as array
      */
     public function __construct(array $iniArr) {
@@ -19,6 +17,8 @@ abstract class BaseConfig {
     }
 
     /**
+     * Gets value from ini file
+     *
      * @param string $name
      * @return string
      */

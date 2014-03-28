@@ -8,6 +8,9 @@ use reClick\Framework\Configs\GcmConfig;
 
 class GCM {
 
+    /**
+     * @var string
+     */
     private $apiKey;
 
     /**
@@ -53,9 +56,7 @@ class GCM {
     }
 
     /**
-     * Gets/Sets GCM message
-     *
-     * @param Message $message
+     * @param Message|null $message
      * @return GCM|Message
      */
     public function message(Message $message = null) {
@@ -100,7 +101,7 @@ class GCM {
      * Generic simple getter/setter
      *
      * @param string $property
-     * @param string $value
+     * @param string|null $value
      * @return Message|mixed
      */
     private function getterSetter($property, $value = null) {

@@ -13,8 +13,6 @@ class Message {
     private $dryRun;
 
     /**
-     * Constructor
-     *
      * @param array $data
      * @param array $registrationIds
      * @param string $collapseKey
@@ -42,8 +40,6 @@ class Message {
     }
 
     /**
-     * Gets/Sets the data property
-     *
      * @param array|null $data
      * @return array|Message
      */

@@ -5,8 +5,6 @@ namespace reClick\Framework\Configs;
 class Config {
 
     /**
-     * Returns instantiated DbConfig object
-     *
      * @return DbConfig
      */
     public function db() {
@@ -16,8 +14,6 @@ class Config {
     }
 
     /**
-     * Returns instantiated GcmConfig object
-     *
      * @return GcmConfig
      */
     public function gcm() {
@@ -27,19 +23,15 @@ class Config {
     }
 
     /**
-     * Returns ini file's filename
-     *
      * @param string $filename
-     * @return string
+     * @return string ini file's filename
      */
     private function getIniFile($filename) {
         return $this->getAllIniFiles()[$filename];
     }
 
     /**
-     * Returns all ini files as array
-     *
-     * @return array
+     * @return array All ini file names as array
      */
     private function getAllIniFiles() {
         $iniFiles = glob('*.ini');
@@ -53,8 +45,6 @@ class Config {
     }
 
     /**
-     * Parses ini file and returns it as array
-     *
      * @param string $fileName
      * @return array parsed ini file as array
      */
