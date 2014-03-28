@@ -10,7 +10,7 @@ class DbConfig extends BaseConfig {
      * @return string
      */
     public function driver() {
-        return parent::getValue('driver');
+        return $this->getValue('driver');
     }
 
     /**
@@ -19,7 +19,7 @@ class DbConfig extends BaseConfig {
      * @return string
      */
     public function dbName() {
-        return parent::getValue('dbname');
+        return $this->getValue('dbname');
     }
 
     /**
@@ -28,7 +28,7 @@ class DbConfig extends BaseConfig {
      * @return string
      */
     public function host() {
-        return parent::getValue('host');
+        return $this->getValue('host');
     }
 
     /**
@@ -37,7 +37,7 @@ class DbConfig extends BaseConfig {
      * @return string
      */
     public function username() {
-        return parent::getValue('username');
+        return $this->getValue('username');
     }
 
     /**
@@ -46,6 +46,6 @@ class DbConfig extends BaseConfig {
      * @return string
      */
     public function password() {
-        return parent::getValue('password');
+        return $this->getValue('password');
     }
 } 

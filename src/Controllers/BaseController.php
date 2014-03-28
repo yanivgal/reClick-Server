@@ -5,7 +5,7 @@ namespace reClick\Controllers;
 class BaseController {
 
     /**
-     * @var int
+     * @var int $id
      */
     protected $id;
 

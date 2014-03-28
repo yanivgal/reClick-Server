@@ -6,17 +6,12 @@ use reClick\Models\BaseModel;
 
 class GameModel extends BaseModel {
 
-    /**
-     * Constructor
-     */
     public function __construct() {
         parent::__construct();
         $this->table = 'games';
     }
 
     /**
-     * Creates a new game
-     *
      * @return int
      */
     public function create() {
@@ -27,8 +22,6 @@ class GameModel extends BaseModel {
     }
 
     /**
-     * Returns the number of players in game
-     *
      * @param int $id
      * @return string
      */
@@ -37,10 +30,6 @@ class GameModel extends BaseModel {
     }
 
     /**
-     * Gets Sets current game sequence<p>
-     * Game sequence example:<p>
-     * '1,3,2,3,4,1,1,2,3,4,2,3,1,1,3,2,4,4,3,4,2,3,4,4,1,2,3'
-     *
      * @param int $id
      * @param string|null $sequence
      * @return mixed
@@ -50,8 +39,6 @@ class GameModel extends BaseModel {
     }
 
     /**
-     * Gets Sets game's turn number
-     *
      * @param int $id
      * @param string|null $turn
      * @return mixed
@@ -61,8 +48,6 @@ class GameModel extends BaseModel {
     }
 
     /**
-     * Checks if game has started
-     *
      * @param int $id
      * @return string
      */
@@ -71,8 +56,6 @@ class GameModel extends BaseModel {
     }
 
     /**
-     * Start the game
-     *
      * @param int $id
      * @return int
      */
