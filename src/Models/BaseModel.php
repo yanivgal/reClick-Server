@@ -12,7 +12,7 @@ class BaseModel {
     protected $db;
 
     /**
-     * @var string table name
+     * @var string Table name
      */
     protected $table;
 
@@ -59,15 +59,15 @@ class BaseModel {
      *
      * @param int $id
      * @param string $column
-     * @param string|null $val
+     * @param string|null $value
      * @return mixed
      */
-    protected function getSet($id, $column, $val = null) {
-        if (isset($val)) {
-            return $this->model->setOne($id, $column, $val);
+    protected function getSet($id, $column, $value = null) {
+        if (isset($value)) {
+            return $this->setOne($id, $column, $value);
         }
 
-        return $this->model->getOne($id,$column);
+        return $this->getOne($id,$column);
     }
 
 } 

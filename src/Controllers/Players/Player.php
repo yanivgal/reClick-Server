@@ -11,9 +11,7 @@ class Player extends BaseController {
     const RAW_PASSWORD = false;
 
     /**
-     * Constructor
-     *
-     * @param int $id Player's ID
+     * @param int $id Player ID
      */
     public function __construct($id = null) {
         parent::__construct($id);
@@ -21,8 +19,6 @@ class Player extends BaseController {
     }
 
     /**
-     * Creates a new player
-     *
      * @param string $username
      * @param string $password
      * @param string $nickname
@@ -52,8 +48,6 @@ class Player extends BaseController {
     }
 
     /**
-     * Gets a player from his username
-     *
      * @param $username
      * @return Player
      */
@@ -64,48 +58,40 @@ class Player extends BaseController {
     }
 
     /**
-     * Gets Sets player's username
-     *
      * @param string $username
      * @return int|string
      */
     public function username($username = null) {
-        return $this->getSet('username', $username);
+        return $this->model->username($this->id, $username);
     }
 
     /**
-     * Gets Sets player's password
-     *
      * @param string $password
-     * @param bool $hashPassword
+     * @param bool $hashPassword HASH_PASSWORD | RAW_PASSWORD
      * @return int|string
      */
-    public function password($password = null, $hashPassword = false) {
+    public function password($password = null, $hashPassword = self::RAW_PASSWORD) {
         if (isset($password) && $hashPassword) {
             $password = $this->hashPassword($password);
         }
 
-        return $this->getSet('password', $password);
+        return $this->model->password($this->id, $password);
     }
 
     /**
-     * Gets Sets player's nickname
-     *
      * @param string $nickname
      * @return int|string
      */
     public function nickname($nickname = null) {
-        return $this->getSet('nickname', $nickname);
+        return $this->model->nickname($this->id, $nickname);
     }
 
     /**
-     * Gets Sets player's GCM registration ID
-     *
      * @param string $gcmRegId
      * @return int|string
      */
     public function gcmRegId($gcmRegId = null) {
-        return $this->getSet('gcm_reg_id', $gcmRegId);
+        return $this->model->gcmRegId($this->id, $gcmRegId);
     }
 
     /**

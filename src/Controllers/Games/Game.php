@@ -8,9 +8,7 @@ use reClick\Models\Games\GameModel;
 class Game extends BaseController {
 
     /**
-     * Constructor
-     *
-     * @param int $id GameModel's ID
+     * @param int $id Game ID
      */
     public function __construct($id = null) {
         parent::__construct($id);
@@ -18,8 +16,6 @@ class Game extends BaseController {
     }
 
     /**
-     * Creates a new game
-     *
      * @return Game
      */
     public function create() {
@@ -29,8 +25,6 @@ class Game extends BaseController {
     }
 
     /**
-     * Returns the number of players in game
-     *
      * @return string
      */
     public function numOfPlayers() {
@@ -38,10 +32,6 @@ class Game extends BaseController {
     }
 
     /**
-     * Gets Sets current game sequence<p>
-     * Game sequence example:<p>
-     * '1,3,2,3,4,1,1,2,3,4,2,3,1,1,3,2,4,4,3,4,2,3,4,4,1,2,3'
-     *
      * @param string $sequence
      * @return int|string
      */
@@ -50,8 +40,6 @@ class Game extends BaseController {
     }
 
     /**
-     * Gets Sets game's turn number
-     *
      * @param string|null $turn
      * @return int|string
      */
@@ -60,8 +48,6 @@ class Game extends BaseController {
     }
 
     /**
-     * Checks if game has started
-     *
      * @return string
      */
     public function started() {
@@ -69,8 +55,6 @@ class Game extends BaseController {
     }
 
     /**
-     * Start the game
-     *
      * @return int
      */
     public function start() {

@@ -10,6 +10,6 @@ class GcmConfig extends BaseConfig {
      * @return string
      */
     public function apiKey() {
-        return parent::getValue('apikey');
+        return $this->getValue('apikey');
     }
 } 
