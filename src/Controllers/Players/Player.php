@@ -103,5 +103,4 @@ class Player extends BaseController {
     private function hashPassword($password) {
         return md5($password);
     }
-
 } 
