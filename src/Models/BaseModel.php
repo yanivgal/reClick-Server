@@ -30,7 +30,7 @@ class BaseModel {
      * @param string $column
      * @return string
      */
-    protected  function getOne($id, $column) {
+    protected function getOne($id, $column) {
         return $this->db->select(
             $this->table,
             [$column],
@@ -46,7 +46,7 @@ class BaseModel {
      * @param string $value
      * @return int number of effected rows
      */
-    protected  function setOne($id, $column, $value) {
+    protected function setOne($id, $column, $value) {
         return $this->db->update(
             $this->table,
             [$column => $value],

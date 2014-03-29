@@ -60,5 +60,4 @@ class Game extends BaseController {
     public function start() {
         return $this->model->startGame($this->id);
     }
-
 } 
