@@ -1,3 +1,5 @@
 .idea/
 database.ini
 gcm.ini
+vendor/
+composer.lock
