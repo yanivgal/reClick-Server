@@ -7,7 +7,7 @@ use reClick\Models\BaseModel;
 class PlayerInGameModel extends BaseModel {
 
     const NOT_FIRST_PLAYER = 0;
-    const FIRST_PLAYER_ID = 1;
+    const FIRST_PLAYER_TURN = 1;
 
     public function __construct() {
         parent::__construct();

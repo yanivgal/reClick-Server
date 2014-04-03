@@ -22,9 +22,9 @@ class PlayerInGame extends BaseController {
     public function addPlayer($playerId, $gameId) {
         $currTurn = $this->model->getCurrTurn($gameId);
         $newTurn = empty($currTurn) ?
-            PlayerInGameModel::FIRST_PLAYER_ID : $currTurn + 1;
-        $isFirst = $newTurn == PlayerInGameModel::FIRST_PLAYER_ID ?
-            PlayerInGameModel::FIRST_PLAYER_ID :
+            PlayerInGameModel::FIRST_PLAYER_TURN : $currTurn + 1;
+        $isFirst = $newTurn == PlayerInGameModel::FIRST_PLAYER_TURN ?
+            PlayerInGameModel::FIRST_PLAYER_TURN :
             PlayerInGameModel::NOT_FIRST_PLAYER;
         $this->model->addPlayerToGame($playerId, $gameId, $newTurn, $isFirst);
     }
