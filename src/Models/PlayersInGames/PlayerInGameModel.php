@@ -83,7 +83,7 @@ class PlayerInGameModel extends BaseModel {
      * @param int $gameId
      * @param int $turn
      */
-    public function updateTurn($playerId, $gameId, $turn) {
+    public function updatePlayerTurn($playerId, $gameId, $turn) {
         $this->db->update(
             $this->table,
             ['turn' => $turn],

@@ -2,17 +2,17 @@
 
 namespace reClick\Controllers\PlayersInGames;
 
-use reClick\Controllers\BaseController;
 use reClick\Models\PlayersInGames\PlayerInGameModel;
 
-class PlayerInGame extends BaseController {
+class PlayerInGame {
 
     /**
-     * @param int $id PlayerInGame ID
+     * @var \reClick\Models\PlayersInGames\PlayerInGameModel
      */
-    public function __construct($id = null) {
-        parent::__construct($id);
-        $this->model = new PlayerInGameModel;
+    private $model;
+
+    public function __construct() {
+        $this->model = new PlayerInGameModel();
     }
 
     /**
