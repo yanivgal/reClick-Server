@@ -17,13 +17,13 @@ class PlayerInGameModel extends BaseModel {
     /**
      * @param int $playerId
      * @param int $gameId
-     * @param int $newTurn
+     * @param int $turn
      * @param int $isFirstPlayer
      */
     public function addPlayerToGame(
         $playerId,
         $gameId,
-        $newTurn,
+        $turn,
         $isFirstPlayer = NOT_FIRST_PLAYER
     ) {
         $this->db->insert(
@@ -31,8 +31,8 @@ class PlayerInGameModel extends BaseModel {
             [
                 'player_id' => $playerId,
                 'game_id' => $gameId,
-                'approved' => $isFirstPlayer,
-                'turn' => $newTurn
+                'turn' => $turn,
+                'approved' => $isFirstPlayer
             ]
         );
     }
