@@ -4,7 +4,6 @@ namespace reClick\Controllers\PlayersInGames;
 
 use reClick\Controllers\BaseController;
 use reClick\Models\PlayersInGames\PlayerInGameModel;
-use reClick\Framework\Db;
 
 class PlayerInGame extends BaseController {
 
@@ -22,8 +21,11 @@ class PlayerInGame extends BaseController {
      */
     public function addPlayer($playerId, $gameId) {
         $currTurn = $this->model->getCurrTurn($gameId);
-        $newTurn = empty($temp) ? 1 : $currTurn + 1;
-        $isFirst = $newTurn == 1 ? 1 : 0;
+        $newTurn = empty($currTurn) ?
+            PlayerInGameModel::FIRST_PLAYER_ID : $currTurn + 1;
+        $isFirst = $newTurn == PlayerInGameModel::FIRST_PLAYER_ID ?
+            PlayerInGameModel::FIRST_PLAYER_ID :
+            PlayerInGameModel::NOT_FIRST_PLAYER;
         $this->model->addPlayerToGame($playerId, $gameId, $newTurn, $isFirst);
     }
 
@@ -35,14 +37,11 @@ class PlayerInGame extends BaseController {
         $this->model->deletePlayerFromGame($playerId, $gameId);
     }
 
-    private function updateTurns($gameId, $removedTurn) {
-        $db = new Db();
-        $db->query(
-            'UPDATE players_in_games
-             SET    turn = turn - 1
-             WHERE  game_id = ?
-                    AND turn > ?',
-            [$gameId, $removedTurn]
-        );
+    /**
+     * @param int $gameId
+     * @param int $removedTurn
+     */
+    public function updateTurns($gameId, $removedTurn) {
+        $this->model->updateTurns($gameId, $removedTurn);
     }
 }

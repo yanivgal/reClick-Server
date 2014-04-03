@@ -6,6 +6,9 @@ use reClick\Models\BaseModel;
 
 class PlayerInGameModel extends BaseModel {
 
+    const NOT_FIRST_PLAYER = 0;
+    const FIRST_PLAYER_ID = 1;
+
     public function __construct() {
         parent::__construct();
         $this->table = 'players_in_games';
@@ -21,7 +24,7 @@ class PlayerInGameModel extends BaseModel {
         $playerId,
         $gameId,
         $newTurn,
-        $isFirstPlayer = 0
+        $isFirstPlayer = NOT_FIRST_PLAYER
     ) {
         $this->db->insert(
             $this->table,
@@ -61,6 +64,21 @@ class PlayerInGameModel extends BaseModel {
     }
 
     /**
+     * @param int $gameId
+     * @param int $removedTurn
+     */
+    public function updateTurns($gameId, $removedTurn) {
+        $db = new Db();
+        $db->query(
+            'UPDATE players_in_games
+             SET    turn = turn - 1
+             WHERE  game_id = ?
+                    AND turn > ?',
+            [$gameId, $removedTurn]
+        );
+    }
+
+    /**
      * @param int $playerId
      * @param int $gameId
      * @param int $turn
@@ -71,7 +89,7 @@ class PlayerInGameModel extends BaseModel {
             ['turn' => $turn],
             [
                 'player_id' => $playerId,
-                'game-id' => $gameId
+                'game_id' => $gameId
             ]
         );
     }
