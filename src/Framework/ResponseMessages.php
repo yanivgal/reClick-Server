@@ -2,8 +2,6 @@
 
 namespace reClick\Framework;
 
-use reClick\Framework\Configs\Config;
-
 class ResponseMessages {
 
     private $data;
@@ -16,10 +14,14 @@ class ResponseMessages {
      * @param array $data
      * @param string $isSuccess ('success' or 'failed')
      */
-    public function __construct(array $data = null, $isSuccess = FAILED) {
-        $this->data = $data;
-        $this->data[STATUS_INDEX] = strcasecmp($isSuccess, SUCCESS) == EQUALS ?
-            SUCCESS : FAILED;
+    public function __construct(
+        $isSuccess = self::FAILED,
+        array $data = null
+    ) {
+        $this->data = $data; //STATUS_INDEX
+        $this->data[self::STATUS_INDEX] =
+            strcasecmp($isSuccess, self::SUCCESS) == Self::EQUALS ?
+            self::SUCCESS : self::FAILED;
     }
 
     /**
