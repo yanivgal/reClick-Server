@@ -64,8 +64,7 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-//    $string = 'Yaniv';
-//    print strlen(mb_substr($string, 0, null, "utf-8"));
+
 });
 
 $app->run();
