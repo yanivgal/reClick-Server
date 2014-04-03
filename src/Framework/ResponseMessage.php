@@ -17,7 +17,7 @@ class ResponseMessage {
     public function __construct($isSuccess, array $data = null) {
         $this->data = $data;
         $this->data[self::STATUS_INDEX] =
-            strcasecmp($isSuccess, self::SUCCESS) == Self::EQUALS ?
+            strcasecmp($isSuccess, self::SUCCESS) == self::EQUALS ?
             self::SUCCESS : self::FAILED;
     }
 
