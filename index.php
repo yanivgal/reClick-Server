@@ -3,6 +3,7 @@
 require 'vendor/autoload.php';
 
 use reClick\GCM\GCM;
+use reClick\Framework\ResponseMessage;
 
 $app = new \Slim\Slim();
 
@@ -26,20 +27,20 @@ $app->post('/register/', function() use ($app) {
         );
     } catch (PDOException $e) {
         print $e->getMessage();
-        $response['status'] = 'failed';
-        $response['message'] = 'Some message';
+        (new ResponseMessage(ResponseMessage::FAILED))
+            ->addData('message', $e->getMessage())
+            ->send();
         exit;
     } catch (Exception $e) {
-        //TODO Print message to log.
-        $response['status'] = 'failed';
-        $response['message'] = 'Some message';
+        (new ResponseMessage(ResponseMessage::FAILED))
+            ->addData('message', 'Some message')
+            ->send();
         exit;
     }
 
-    $response['status'] = 'success';
-    $response['message'] = 'Player registered successfully';
-
-    print json_encode($response);
+    (new ResponseMessage(ResponseMessage::SUCCESS))
+        ->addData('message', 'Player registered successfully')
+        ->send();
 });
 
 $app->post('/', function() use ($app) {
