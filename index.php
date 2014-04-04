@@ -58,13 +58,14 @@ $app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
             ->send();
         exit;
     }
-    // Converts boolean string to real boolean
-    $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);
-
-    $requestVars['password'] = $hash ?
-        md5($requestVars['password']) : $requestVars['password'];
 
     $player = (new Player())->fromUsername($requestVars['username']);
+
+    // Converts boolean string to real boolean
+    $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);
+    $requestVars['password'] =$hash ?
+        $player->hashPassword($requestVars['password']) :
+        $requestVars['password'];
 
     if ($requestVars['password'] != $player->password()) {
         (new ResponseMessage(ResponseMessage::FAILED))
