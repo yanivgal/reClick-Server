@@ -3,6 +3,7 @@
 require 'vendor/autoload.php';
 
 use reClick\GCM\GCM;
+use reClick\Controllers\Players\Player;
 use reClick\Framework\ResponseMessage;
 
 $app = new \Slim\Slim();
@@ -17,7 +18,7 @@ $app->post('/register/', function() use ($app) {
     ];
     $requestVars = initRequestVars($app->request->post(), $expectedVars);
 
-    $player = new \reClick\Controllers\Players\Player();
+    $player = new Player();
     try {
         $player->create(
             $requestVars['username'],
@@ -40,6 +41,41 @@ $app->post('/register/', function() use ($app) {
 
     (new ResponseMessage(ResponseMessage::SUCCESS))
         ->addData('message', 'Player registered successfully')
+        ->send();
+});
+
+$app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
+
+    $expectedVars = [
+        'username',
+        'password'
+    ];
+    $requestVars = initRequestVars($app->request->post(), $expectedVars);
+
+    if ($hash != 'true' && $hash != 'false') {
+        (new ResponseMessage(ResponseMessage::FAILED))
+            ->addData('message', 'Hash should be true or false')
+            ->send();
+        exit;
+    }
+
+    $player = (new Player())->fromUsername($requestVars['username']);
+
+    // Converts boolean string to real boolean
+    $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);
+    $requestVars['password'] =$hash ?
+        $player->hashPassword($requestVars['password']) :
+        $requestVars['password'];
+
+    if ($requestVars['password'] != $player->password()) {
+        (new ResponseMessage(ResponseMessage::FAILED))
+            ->addData('message', 'Username or password are incorrect')
+            ->send();
+        exit;
+    }
+
+    (new ResponseMessage(ResponseMessage::SUCCESS))
+        ->addData('message', 'Player successfully logged in')
         ->send();
 });
 
