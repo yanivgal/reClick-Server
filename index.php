@@ -75,8 +75,11 @@ $app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
     }
 
     (new ResponseMessage(ResponseMessage::SUCCESS))
-        ->addData('message', 'Player successfully logged in')
-        ->send();
+        ->addData(
+            'message',
+            'Hello ' . $player->nickname()
+            . '. You\'ve been successfully logged in.'
+        )->send();
 });
 
 $app->post('/', function() use ($app) {
@@ -101,7 +104,7 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-
+    print '{"status":"success"}';
 });
 
 $app->run();

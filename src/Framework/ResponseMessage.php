@@ -36,4 +36,8 @@ class ResponseMessage {
     public function send() {
         print json_encode($this->data);
     }
+
+    public function toJson() {
+        return json_encode($this->data);
+    }
 }
