@@ -8,7 +8,7 @@ use reClick\Framework\ResponseMessage;
 
 $app = new \Slim\Slim();
 
-$app->post('/register/', function() use ($app) {
+$app->post('/signup/', function() use ($app) {
 
     $expectedVars = [
         'username',
@@ -27,7 +27,6 @@ $app->post('/register/', function() use ($app) {
             $requestVars['gcmRegId']
         );
     } catch (PDOException $e) {
-        print $e->getMessage();
         (new ResponseMessage(ResponseMessage::FAILED))
             ->addData('message', $e->getMessage())
             ->send();
@@ -42,7 +41,7 @@ $app->post('/register/', function() use ($app) {
     (new ResponseMessage(ResponseMessage::SUCCESS))
         ->addData(
             'message',
-            'Hello ' . $player->nickname() . '. You\'ve successfully logged in.'
+            'Hello ' . $player->nickname()
         )
         ->addData('username', $player->username())
         ->addData('nickname', $player->nickname())
@@ -85,7 +84,7 @@ $app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
     (new ResponseMessage(ResponseMessage::SUCCESS))
         ->addData(
             'message',
-            'Hello ' . $player->nickname() . '. You\'ve successfully logged in.'
+            'Hello ' . $player->nickname()
         )
         ->addData('username', $player->username())
         ->addData('nickname', $player->nickname())
