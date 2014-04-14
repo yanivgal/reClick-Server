@@ -40,7 +40,12 @@ $app->post('/register/', function() use ($app) {
     }
 
     (new ResponseMessage(ResponseMessage::SUCCESS))
-        ->addData('message', 'Player registered successfully')
+        ->addData(
+            'message',
+            'Hello ' . $player->nickname() . '. You\'ve successfully logged in.'
+        )
+        ->addData('username', $player->username())
+        ->addData('nickname', $player->nickname())
         ->send();
 });
 
@@ -48,7 +53,8 @@ $app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
 
     $expectedVars = [
         'username',
-        'password'
+        'password',
+        'gcmRegId'
     ];
     $requestVars = initRequestVars($app->request->post(), $expectedVars);
 
@@ -69,17 +75,21 @@ $app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
 
     if ($requestVars['password'] != $player->password()) {
         (new ResponseMessage(ResponseMessage::FAILED))
-            ->addData('message', 'Username or password are incorrect')
+            ->addData('message', 'Invalid Username or Password')
             ->send();
         exit;
     }
 
+    $player->gcmRegId($requestVars['gcmRegId']);
+
     (new ResponseMessage(ResponseMessage::SUCCESS))
         ->addData(
             'message',
-            'Hello ' . $player->nickname()
-            . '. You\'ve been successfully logged in.'
-        )->send();
+            'Hello ' . $player->nickname() . '. You\'ve successfully logged in.'
+        )
+        ->addData('username', $player->username())
+        ->addData('nickname', $player->nickname())
+        ->send();
 });
 
 $app->post('/', function() use ($app) {
