@@ -3,3 +3,4 @@ database.ini
 gcm.ini
 vendor/
 composer.lock
+composer.phar
