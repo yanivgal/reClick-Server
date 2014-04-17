@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.6
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2014 at 03:16 PM
+-- Generation Time: Apr 17, 2014 at 12:41 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `turn` int(4) DEFAULT NULL,
   `started` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -46,13 +46,13 @@ DROP TABLE IF EXISTS `players`;
 CREATE TABLE IF NOT EXISTS `players` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(25) NOT NULL,
-  `password` varchar(25) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `nickname` varchar(25) NOT NULL,
   `gcm_reg_id` varchar(4096) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   FULLTEXT KEY `gcm_reg_id` (`gcm_reg_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -64,8 +64,8 @@ DROP TABLE IF EXISTS `players_in_games`;
 CREATE TABLE IF NOT EXISTS `players_in_games` (
   `player_id` int(10) unsigned NOT NULL,
   `game_id` int(10) unsigned NOT NULL,
-  `turn` int(4) unsigned NOT NULL,
-  `approved` tinyint(1) NOT NULL DEFAULT '0',
+  `turn` int(4) unsigned DEFAULT NULL,
+  `confirmed` tinyint(4) NOT NULL DEFAULT '0',
   KEY `player_id` (`player_id`),
   KEY `game_id` (`game_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -78,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `players_in_games` (
 -- Constraints for table `players_in_games`
 --
 ALTER TABLE `players_in_games`
-  ADD CONSTRAINT `fk_players_in_games_game_id` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_players_in_games_player_id` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON UPDATE CASCADE;
+ADD CONSTRAINT `fk_players_in_games_game_id` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`) ON UPDATE CASCADE,
+ADD CONSTRAINT `fk_players_in_games_player_id` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

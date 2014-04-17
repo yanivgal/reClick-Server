@@ -92,4 +92,4 @@ class Session {
             ->addData('nickname', $player->nickname())
             ->send();
     }
-} 
+}
