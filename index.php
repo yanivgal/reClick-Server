@@ -3,93 +3,11 @@
 require 'vendor/autoload.php';
 
 use reClick\GCM\GCM;
-use reClick\Controllers\Players\Player;
-use reClick\Framework\ResponseMessage;
 
 $app = new \Slim\Slim();
 
-$app->post('/signup/', function() use ($app) {
-
-    $expectedVars = [
-        'username',
-        'password',
-        'nickname',
-        'gcmRegId'
-    ];
-    $requestVars = initRequestVars($app->request->post(), $expectedVars);
-
-    $player = new Player();
-    try {
-        $player->create(
-            $requestVars['username'],
-            $requestVars['password'],
-            $requestVars['nickname'],
-            $requestVars['gcmRegId']
-        );
-    } catch (PDOException $e) {
-        (new ResponseMessage(ResponseMessage::FAILED))
-            ->addData('message', $e->getMessage())
-            ->send();
-        exit;
-    } catch (Exception $e) {
-        (new ResponseMessage(ResponseMessage::FAILED))
-            ->addData('message', 'Some message')
-            ->send();
-        exit;
-    }
-
-    (new ResponseMessage(ResponseMessage::SUCCESS))
-        ->addData(
-            'message',
-            'Hello ' . $player->nickname()
-        )
-        ->addData('username', $player->username())
-        ->addData('nickname', $player->nickname())
-        ->send();
-});
-
-$app->post('/login/?(hash/:hash/?)', function($hash = 'false') use ($app) {
-
-    $expectedVars = [
-        'username',
-        'password',
-        'gcmRegId'
-    ];
-    $requestVars = initRequestVars($app->request->post(), $expectedVars);
-
-    if ($hash != 'true' && $hash != 'false') {
-        (new ResponseMessage(ResponseMessage::FAILED))
-            ->addData('message', 'Hash should be true or false')
-            ->send();
-        exit;
-    }
-
-    $player = (new Player())->fromUsername($requestVars['username']);
-
-    // Converts boolean string to real boolean
-    $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);
-    $requestVars['password'] =$hash ?
-        $player->hashPassword($requestVars['password']) :
-        $requestVars['password'];
-
-    if ($requestVars['password'] != $player->password()) {
-        (new ResponseMessage(ResponseMessage::FAILED))
-            ->addData('message', 'Invalid Username or Password')
-            ->send();
-        exit;
-    }
-
-    $player->gcmRegId($requestVars['gcmRegId']);
-
-    (new ResponseMessage(ResponseMessage::SUCCESS))
-        ->addData(
-            'message',
-            'Hello ' . $player->nickname()
-        )
-        ->addData('username', $player->username())
-        ->addData('nickname', $player->nickname())
-        ->send();
-});
+$app->post('/signup/', ['reClick\Routes\Session', 'signUp']);
+$app->post('/login/?(hash/:hash/?)', ['reClick\Routes\Session', 'login']);
 
 $app->post('/', function() use ($app) {
 
