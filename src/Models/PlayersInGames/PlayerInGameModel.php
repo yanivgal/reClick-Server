@@ -38,10 +38,43 @@ class PlayerInGameModel extends BaseModel {
     }
 
     /**
+     * @param int $playerId
+     * @param int $gameId
+     * @return int
+     */
+    public function setConfirmed($playerId, $gameId) {
+        return $this->db->update(
+            $this->table,
+            ['confirmed' => 1],
+            [
+                'player_id' => $playerId,
+                'game_id' => $gameId
+            ]
+        );
+    }
+
+    /**
+     * @param int $playerId
+     * @param int $gameId
+     * @param int $turn
+     * @return int
+     */
+    public function setTurn($playerId, $gameId, $turn) {
+        return $this->db->update(
+            $this->table,
+            ['turn' => $turn],
+            [
+                'player_id' => $playerId,
+                'game_id' => $gameId
+            ]
+        );
+    }
+
+    /**
      * @param int $gameId
      * @return string
      */
-    public function getCurrTurn($gameId) {
+    public function getLastInLine($gameId) {
         return $this->db->select(
             $this->table,
             ['max(turn) as max_turn'],
