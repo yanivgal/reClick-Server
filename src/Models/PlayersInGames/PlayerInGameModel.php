@@ -32,7 +32,7 @@ class PlayerInGameModel extends BaseModel {
                 'player_id' => $playerId,
                 'game_id' => $gameId,
                 'turn' => $turn,
-                'approved' => $isFirstPlayer
+                'confirmed' => $isFirstPlayer
             ]
         );
     }
