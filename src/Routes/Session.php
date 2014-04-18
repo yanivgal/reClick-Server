@@ -3,6 +3,7 @@
 namespace reClick\Routes;
 
 use reClick\Controllers\Players\Player;
+use reClick\Controllers\Players\Players;
 use reClick\Framework\ResponseMessage;
 use Slim\Slim;
 
@@ -19,9 +20,8 @@ class Session {
         ];
         $requestVars = initRequestVars($app->request->post(), $expectedVars);
 
-        $player = new Player();
         try {
-            $player->create(
+            $player = (new Players())->create(
                 $requestVars['username'],
                 $requestVars['password'],
                 $requestVars['nickname'],
@@ -66,7 +66,7 @@ class Session {
             exit;
         }
 
-        $player = (new Player())->fromUsername($requestVars['username']);
+        $player = new Player($requestVars['username']);
 
         // Converts boolean string to real boolean
         $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);

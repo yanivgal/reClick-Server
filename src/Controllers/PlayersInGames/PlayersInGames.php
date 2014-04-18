@@ -2,17 +2,17 @@
 
 namespace reClick\Controllers\PlayersInGames;
 
-use reClick\Models\PlayersInGames\PlayerInGameModel;
+use reClick\Models\PlayersInGames\PlayersInGamesModel;
 
-class PlayerInGame {
+class PlayersInGames {
 
     /**
-     * @var \reClick\Models\PlayersInGames\PlayerInGameModel
+     * @var \reClick\Models\PlayersInGames\PlayersInGamesModel
      */
     private $model;
 
     public function __construct() {
-        $this->model = new PlayerInGameModel();
+        $this->model = new PlayersInGamesModel();
     }
 
     /**
@@ -21,9 +21,9 @@ class PlayerInGame {
      */
     public function addPlayer($playerId, $gameId) {
         $newTurn = $this->getNewTurnNum($gameId);
-        $isFirst = $newTurn == PlayerInGameModel::FIRST_PLAYER_TURN ?
-            PlayerInGameModel::FIRST_PLAYER_TURN :
-            PlayerInGameModel::NOT_FIRST_PLAYER;
+        $isFirst = $newTurn == PlayersInGamesModel::FIRST_PLAYER_TURN ?
+            PlayersInGamesModel::FIRST_PLAYER_TURN :
+            PlayersInGamesModel::NOT_FIRST_PLAYER;
         $this->model->addPlayerToGame($playerId, $gameId, $newTurn, $isFirst);
     }
 
@@ -58,11 +58,19 @@ class PlayerInGame {
 
     /**
      * @param int $gameId
+     * @return array
+     */
+    public function players($gameId) {
+        return $this->model->players($gameId);
+    }
+
+    /**
+     * @param int $gameId
      * @return string
      */
     private function getNewTurnNum($gameId) {
         $lastInLine = $this->model->getLastInLine($gameId);
         return empty($lastInLine) ?
-            PlayerInGameModel::FIRST_PLAYER_TURN : $lastInLine + 1;
+            PlayersInGamesModel::FIRST_PLAYER_TURN : (int) $lastInLine + 1;
     }
 }

@@ -3,58 +3,27 @@
 namespace reClick\Controllers\Players;
 
 use reClick\Controllers\BaseController;
+use reClick\Traits\Cryptography;
 use reClick\Models\Players\PlayerModel;
 
 class Player extends BaseController {
+
+    use Cryptography;
 
     const HASH_PASSWORD = true;
     const RAW_PASSWORD = false;
 
     /**
-     * @param int $id Player ID
+     * @param int|string $identifier Player's ID|Username
      */
-    public function __construct($id = null) {
-        parent::__construct($id);
+    public function __construct($identifier) {
         $this->model = new PlayerModel();
-    }
 
-    /**
-     * @param string $username
-     * @param string $password
-     * @param string $nickname
-     * @param string $gcmRegId
-     * @param bool $hashPassword
-     * @return Player
-     */
-    public function create(
-        $username,
-        $password,
-        $nickname,
-        $gcmRegId,
-        $hashPassword = false
-    ) {
-        if ($hashPassword) {
-            $password = $this->hashPassword($password);
+        if (is_numeric($identifier) && floor($identifier) == $identifier) {
+            parent::__construct($identifier);
+        } else {
+            parent::__construct($this->model->getIdFromUsername($identifier));
         }
-
-        $this->id = $this->model->create(
-            $username,
-            $password,
-            $nickname,
-            $gcmRegId
-        );
-
-        return $this;
-    }
-
-    /**
-     * @param $username
-     * @return Player
-     */
-    public function fromUsername($username) {
-        $this->id = $this->model->getIdFromUsername($username);
-
-        return $this;
     }
 
     /**
@@ -92,15 +61,5 @@ class Player extends BaseController {
      */
     public function gcmRegId($gcmRegId = null) {
         return $this->model->gcmRegId($this->id, $gcmRegId);
-    }
-
-    /**
-     * Hash a given password string using MD5 (message-digest) algorithm
-     *
-     * @param string $password
-     * @return string
-     */
-    public function hashPassword($password) {
-        return md5($password);
     }
 } 

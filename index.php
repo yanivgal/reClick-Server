@@ -31,7 +31,9 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-    print '{"status":"success"}';
+    echo '<pre>';
+    print_r((new \reClick\Controllers\Games\Games())
+        ->getAllOpenGames());
 });
 
 $app->run();

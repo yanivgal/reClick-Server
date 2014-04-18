@@ -22,7 +22,7 @@ class BaseController {
      * @param int $id
      */
     public function __construct($id = null) {
-        $this->id = isset($id) ? $id : null;
+        $this->id = $id;
     }
 
     /**

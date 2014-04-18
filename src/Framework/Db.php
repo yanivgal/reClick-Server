@@ -307,6 +307,10 @@ class Db {
      * @return string
      */
     private function createQueryClause($array, $clauseType) {
+        if (empty($array)) {
+            return '';
+        }
+
         switch ($clauseType) {
             case 'WHERE':
                 $divider = ' AND ';

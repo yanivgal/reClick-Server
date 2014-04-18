@@ -12,16 +12,6 @@ class GameModel extends BaseModel {
     }
 
     /**
-     * @return int
-     */
-    public function create() {
-        return $this->db->insert(
-            $this->table,
-            []
-        );
-    }
-
-    /**
      * @param int $id
      * @return string
      */

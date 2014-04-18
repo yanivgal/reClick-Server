@@ -2,9 +2,10 @@
 
 namespace reClick\Models\PlayersInGames;
 
+use reClick\Framework\Db;
 use reClick\Models\BaseModel;
 
-class PlayerInGameModel extends BaseModel {
+class PlayersInGamesModel extends BaseModel {
 
     const NOT_FIRST_PLAYER = 0;
     const FIRST_PLAYER_TURN = 1;
@@ -24,7 +25,7 @@ class PlayerInGameModel extends BaseModel {
         $playerId,
         $gameId,
         $turn,
-        $isFirstPlayer = NOT_FIRST_PLAYER
+        $isFirstPlayer = self::NOT_FIRST_PLAYER
     ) {
         $this->db->insert(
             $this->table,
@@ -125,5 +126,20 @@ class PlayerInGameModel extends BaseModel {
                 'game_id' => $gameId
             ]
         );
+    }
+
+    /**
+     * @param int $gameId
+     * @return array
+     */
+    public function players($gameId) {
+        return $this->db->select(
+            $this->table,
+            ['player_id'],
+            [
+                'game_id' => $gameId,
+                'confirmed' => 1
+            ]
+        )->fetchAll();
     }
 }

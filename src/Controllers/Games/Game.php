@@ -3,6 +3,7 @@
 namespace reClick\Controllers\Games;
 
 use reClick\Controllers\BaseController;
+use reClick\Controllers\PlayersInGames\PlayersInGames;
 use reClick\Models\Games\GameModel;
 
 class Game extends BaseController {
@@ -13,15 +14,6 @@ class Game extends BaseController {
     public function __construct($id = null) {
         parent::__construct($id);
         $this->model = new GameModel();
-    }
-
-    /**
-     * @return Game
-     */
-    public function create() {
-        $this->id = $this->model->create();
-
-        return $this;
     }
 
     /**
@@ -59,5 +51,9 @@ class Game extends BaseController {
      */
     public function start() {
         return $this->model->startGame($this->id);
+    }
+
+    public function players() {
+//        (new PlayersInGames())->
     }
 } 
