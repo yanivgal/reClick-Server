@@ -52,4 +52,12 @@ class GameModel extends BaseModel {
     public function start($id) {
         return $this->setOne($id, 'start', 1);
     }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function exists($id) {
+        return $this->getOne($id, 'id');
+    }
 } 

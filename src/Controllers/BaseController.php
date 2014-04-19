@@ -21,8 +21,9 @@ class BaseController {
      *
      * @param int $id
      */
-    public function __construct($id = null) {
-        $this->id = $id;
+    public function __construct($id) {
+        $this->id = filter_var($id, FILTER_VALIDATE_INT) && (int) $id >= 0
+            ? $id : null;
     }
 
     /**

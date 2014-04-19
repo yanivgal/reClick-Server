@@ -6,8 +6,14 @@ use reClick\GCM\GCM;
 
 $app = new \Slim\Slim();
 
-$app->post('/signup/', ['reClick\Routes\Session', 'signUp']);
-$app->post('/login/?(hash/:hash/?)', ['reClick\Routes\Session', 'login']);
+/* Session Route */
+$app->post('/signup/', ['reClick\Routes\SessionRouter', 'signUp']);
+$app->post('/login/?(hash/:hash/?)', ['reClick\Routes\SessionRouter', 'login']);
+
+/* Game Route */
+$app->get('/games/', ['reClick\Routes\GamesRouter', 'getOpenGames']);
+$app->get('/games/:gameId', ['reClick\Routes\GamesRouter', 'getGame']);
+
 
 $app->post('/', function() use ($app) {
 
@@ -31,25 +37,13 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-    echo '<pre>';
-    print_r((new \reClick\Controllers\Games\Games())
-        ->getAllOpenGames());
+    $hash = 'false';
+//    if ($hash != 'true' && $hash != 'false') {
+    if (!$hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN)) {
+        print 'n';
+    } else {
+        print 'y';
+    }
 });
 
 $app->run();
-
-/**
- * @param array $requestObject
- * @param array $expectedVars
- * @return array
- */
-function initRequestVars($requestObject, $expectedVars) {
-    $initVars = [];
-
-    foreach ($expectedVars as $expectedVar) {
-        $initVars[$expectedVar] = isset($requestObject[$expectedVar])
-            ? $requestObject[$expectedVar] : null;
-    }
-
-    return $initVars;
-}

@@ -11,7 +11,7 @@ class Game extends BaseController {
     /**
      * @param int $id Game ID
      */
-    public function __construct($id = null) {
+    public function __construct($id) {
         parent::__construct($id);
         $this->model = new GameModel();
     }
@@ -53,7 +53,31 @@ class Game extends BaseController {
         return $this->model->startGame($this->id);
     }
 
-    public function players() {
-//        (new PlayersInGames())->
+    /**
+     * @return bool
+     */
+    public function exists() {
+        $s = $this->model->exists($this->id);
+        if (empty($s)) {
+            return false;
+        }
+        return true;
     }
-} 
+
+    /**
+     * @return array
+     */
+    public function players() {
+        return (new PlayersInGames())->players($this->id);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $game['id'] = $this->id;
+        $game['numOfPlayers'] = $this->numOfPlayers();
+        $game['players'] = $this->players();
+        return $game;
+    }
+}

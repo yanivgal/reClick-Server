@@ -2,12 +2,12 @@
 
 namespace reClick\Routes;
 
+use Slim\Slim;
 use reClick\Controllers\Players\Player;
 use reClick\Controllers\Players\Players;
 use reClick\Framework\ResponseMessage;
-use Slim\Slim;
 
-class Session {
+class SessionRouter extends BaseRouter {
 
     public function signUp() {
         $app = Slim::getInstance();
@@ -18,7 +18,10 @@ class Session {
             'nickname',
             'gcmRegId'
         ];
-        $requestVars = initRequestVars($app->request->post(), $expectedVars);
+        $requestVars = parent::initRequestVars(
+            $app->request->post(),
+            $expectedVars
+        );
 
         try {
             $player = (new Players())->create(
@@ -49,6 +52,9 @@ class Session {
             ->send();
     }
 
+    /**
+     * @param string $hash
+     */
     public function login($hash = 'false') {
         $app = Slim::getInstance();
 
@@ -57,7 +63,10 @@ class Session {
             'password',
             'gcmRegId'
         ];
-        $requestVars = initRequestVars($app->request->post(), $expectedVars);
+        $requestVars = parent::initRequestVars(
+            $app->request->post(),
+            $expectedVars
+        );
 
         if ($hash != 'true' && $hash != 'false') {
             (new ResponseMessage(ResponseMessage::FAILED))
@@ -70,7 +79,7 @@ class Session {
 
         // Converts boolean string to real boolean
         $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);
-        $requestVars['password'] =$hash ?
+        $requestVars['password'] = $hash ?
             $player->hashPassword($requestVars['password']) :
             $requestVars['password'];
 
