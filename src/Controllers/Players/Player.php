@@ -3,6 +3,7 @@
 namespace reClick\Controllers\Players;
 
 use reClick\Controllers\BaseController;
+use reClick\Controllers\PlayersInGames\PlayersInGames;
 use reClick\Traits\Cryptography;
 use reClick\Models\Players\PlayerModel;
 
@@ -61,5 +62,25 @@ class Player extends BaseController {
      */
     public function gcmRegId($gcmRegId = null) {
         return $this->model->gcmRegId($this->id, $gcmRegId);
+    }
+
+    /**
+     * @return bool
+     */
+    public function exists() {
+        $s = $this->model->exists($this->id);
+        if (empty($s)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param int $gameId
+     * @return bool
+     */
+    public function alreadyConfirmed($gameId) {
+        return (new PlayersInGames())->getConfirmation($this->id, $gameId)
+            ? true : false;
     }
 } 

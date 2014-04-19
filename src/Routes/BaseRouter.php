@@ -2,6 +2,8 @@
 
 namespace reClick\Routes;
 
+use reClick\Framework\ResponseMessage;
+
 class BaseRouter {
 
     /**
@@ -13,6 +15,13 @@ class BaseRouter {
         $initVars = [];
 
         foreach ($expectedVars as $expectedVar) {
+            if (!isset($requestObject[$expectedVar])) {
+                (new ResponseMessage(ResponseMessage::FAILED))
+                    ->addData('message', $expectedVar . ' is required')
+                    ->send();
+                exit;
+            }
+
             $initVars[$expectedVar] = isset($requestObject[$expectedVar])
                 ? $requestObject[$expectedVar] : null;
         }

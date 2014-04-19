@@ -19,12 +19,8 @@ class PlayersInGames {
      * @param int $playerId
      * @param int $gameId
      */
-    public function addPlayer($playerId, $gameId) {
-        $newTurn = $this->getNewTurnNum($gameId);
-        $isFirst = $newTurn == PlayersInGamesModel::FIRST_PLAYER_TURN ?
-            PlayersInGamesModel::FIRST_PLAYER_TURN :
-            PlayersInGamesModel::NOT_FIRST_PLAYER;
-        $this->model->addPlayerToGame($playerId, $gameId, $newTurn, $isFirst);
+    public function addPlayerToGame($playerId, $gameId) {
+        $this->model->addPlayerToGame($playerId, $gameId);
     }
 
     /**
@@ -38,6 +34,15 @@ class PlayersInGames {
             $this->getNewTurnNum($gameId)
         );
         $this->model->setConfirmed($playerId, $gameId);
+    }
+
+    /**
+     * @param int $playerId
+     * @param int $gameId
+     * @return string
+     */
+    public function getConfirmation($playerId, $gameId) {
+        return $this->model->getConfirmation($playerId, $gameId);
     }
 
     /**
@@ -70,7 +75,6 @@ class PlayersInGames {
      */
     private function getNewTurnNum($gameId) {
         $lastInLine = $this->model->getLastInLine($gameId);
-        return empty($lastInLine) ?
-            PlayersInGamesModel::FIRST_PLAYER_TURN : (int) $lastInLine + 1;
+        return empty($lastInLine) ? 1 : (int) $lastInLine + 1;
     }
 }

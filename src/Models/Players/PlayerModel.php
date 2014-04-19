@@ -82,4 +82,12 @@ class PlayerModel extends BaseModel {
     public function gcmRegId($id, $gcmRegId = null) {
         return $this->getSet($id, 'gcm_reg_id', $gcmRegId);
     }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function exists($id) {
+        return $this->getOne($id, 'id');
+    }
 } 

@@ -80,4 +80,19 @@ class Game extends BaseController {
         $game['players'] = $this->players();
         return $game;
     }
+
+    /**
+     * @param int $playerId
+     */
+    public function addPlayer($playerId) {
+        (new PlayersInGames())->addPlayerToGame($playerId, $this->id);
+    }
+
+    /**
+     * @param int $playerId
+     */
+    public function playerConfirmed($playerId) {
+        (new PlayersInGames())->playerConfirmed($playerId, $this->id);
+        $this->model->addPlayer($this->id);
+    }
 }
