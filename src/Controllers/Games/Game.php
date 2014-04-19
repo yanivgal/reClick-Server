@@ -40,17 +40,20 @@ class Game extends BaseController {
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function started() {
-        return $this->model->started($this->id);
+        $started = $this->model->started($this->id);
+        if (!$started) {
+            return false;
+        }
+        return true;
     }
 
-    /**
-     * @return int
-     */
     public function start() {
-        return $this->model->startGame($this->id);
+        $this->model->start($this->id);
+        $this->turn(1);
+        (new PlayersInGames())->removeNotConfirmedPlayers($this->id);
     }
 
     /**
@@ -62,6 +65,21 @@ class Game extends BaseController {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param int $playerId
+     */
+    public function addPlayer($playerId) {
+        (new PlayersInGames())->addPlayerToGame($playerId, $this->id);
+    }
+
+    /**
+     * @param int $playerId
+     */
+    public function playerConfirmed($playerId) {
+        (new PlayersInGames())->playerConfirmed($playerId, $this->id);
+        $this->model->addPlayer($this->id);
     }
 
     /**
@@ -79,20 +97,5 @@ class Game extends BaseController {
         $game['numOfPlayers'] = $this->numOfPlayers();
         $game['players'] = $this->players();
         return $game;
-    }
-
-    /**
-     * @param int $playerId
-     */
-    public function addPlayer($playerId) {
-        (new PlayersInGames())->addPlayerToGame($playerId, $this->id);
-    }
-
-    /**
-     * @param int $playerId
-     */
-    public function playerConfirmed($playerId) {
-        (new PlayersInGames())->playerConfirmed($playerId, $this->id);
-        $this->model->addPlayer($this->id);
     }
 }

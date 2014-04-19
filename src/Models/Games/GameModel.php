@@ -50,7 +50,7 @@ class GameModel extends BaseModel {
      * @return int
      */
     public function start($id) {
-        return $this->setOne($id, 'start', 1);
+        return $this->setOne($id, 'started', 1);
     }
 
     /**

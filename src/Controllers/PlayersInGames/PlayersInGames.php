@@ -49,8 +49,20 @@ class PlayersInGames {
      * @param int $playerId
      * @param int $gameId
      */
-    public function deletePlayer($playerId, $gameId) {
-        $this->model->deletePlayerFromGame($playerId, $gameId);
+    public function removePlayer($playerId, $gameId) {
+        $this->model->removePlayerFromGame($playerId, $gameId);
+    }
+
+    /**
+     * @param int $gameId
+     */
+    public function removeNotConfirmedPlayers($gameId) {
+        $players = $this->players($gameId);
+        foreach ($players as $player) {
+            if (!$player['confirmed']) {
+                $this->removePlayer($player['id'], $gameId);
+            }
+        }
     }
 
     /**

@@ -37,6 +37,10 @@ $app->put(
     '/games/:gameId/players/:username',
     ['reClick\Routes\GameRouter', 'playerConfirmed']
 );
+$app->post(
+    '/games/:gameId/start',
+    ['reClick\Routes\GameRouter', 'startGame']
+);
 
 
 $app->post('/', function() use ($app) {

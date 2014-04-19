@@ -124,4 +124,28 @@ class GameRouter extends BaseRouter {
             ->addData('game', $game->toArray())
             ->send();
     }
+
+    public function startGame($gameId) {
+        $game = new Game($gameId);
+
+        if (!$game->exists()) {
+            (new ResponseMessage(ResponseMessage::FAILED))
+                ->addData('message', 'Game does not exist')
+                ->send();
+            exit;
+        }
+
+        if ($game->started()) {
+            (new ResponseMessage(ResponseMessage::FAILED))
+                ->addData('message', 'Game already started')
+                ->send();
+            exit;
+        }
+
+        $game->start();
+
+        (new ResponseMessage(ResponseMessage::SUCCESS))
+            ->addData('game', $game->toArray())
+            ->send();
+    }
 }

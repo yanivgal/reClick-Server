@@ -72,7 +72,7 @@ class PlayersInGamesModel extends BaseModel {
      * @param int $playerId
      * @param int $gameId
      */
-    public function deletePlayerFromGame($playerId, $gameId) {
+    public function removePlayerFromGame($playerId, $gameId) {
         $this->db->delete(
             $this->table,
             [
