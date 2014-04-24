@@ -19,12 +19,8 @@ class PlayersInGames {
      * @param int $playerId
      * @param int $gameId
      */
-    public function addPlayer($playerId, $gameId) {
-        $newTurn = $this->getNewTurnNum($gameId);
-        $isFirst = $newTurn == PlayersInGamesModel::FIRST_PLAYER_TURN ?
-            PlayersInGamesModel::FIRST_PLAYER_TURN :
-            PlayersInGamesModel::NOT_FIRST_PLAYER;
-        $this->model->addPlayerToGame($playerId, $gameId, $newTurn, $isFirst);
+    public function addPlayerToGame($playerId, $gameId) {
+        $this->model->addPlayerToGame($playerId, $gameId);
     }
 
     /**
@@ -43,9 +39,30 @@ class PlayersInGames {
     /**
      * @param int $playerId
      * @param int $gameId
+     * @return string
      */
-    public function deletePlayer($playerId, $gameId) {
-        $this->model->deletePlayerFromGame($playerId, $gameId);
+    public function getConfirmation($playerId, $gameId) {
+        return $this->model->getConfirmation($playerId, $gameId);
+    }
+
+    /**
+     * @param int $playerId
+     * @param int $gameId
+     */
+    public function removePlayer($playerId, $gameId) {
+        $this->model->removePlayerFromGame($playerId, $gameId);
+    }
+
+    /**
+     * @param int $gameId
+     */
+    public function removeNotConfirmedPlayers($gameId) {
+        $players = $this->players($gameId);
+        foreach ($players as $player) {
+            if (!$player['confirmed']) {
+                $this->removePlayer($player['id'], $gameId);
+            }
+        }
     }
 
     /**
@@ -70,7 +87,6 @@ class PlayersInGames {
      */
     private function getNewTurnNum($gameId) {
         $lastInLine = $this->model->getLastInLine($gameId);
-        return empty($lastInLine) ?
-            PlayersInGamesModel::FIRST_PLAYER_TURN : (int) $lastInLine + 1;
+        return empty($lastInLine) ? 1 : (int) $lastInLine + 1;
     }
 }

@@ -11,7 +11,7 @@ class Game extends BaseController {
     /**
      * @param int $id Game ID
      */
-    public function __construct($id = null) {
+    public function __construct($id) {
         parent::__construct($id);
         $this->model = new GameModel();
     }
@@ -40,20 +40,62 @@ class Game extends BaseController {
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function started() {
-        return $this->model->started($this->id);
+        $started = $this->model->started($this->id);
+        if (!$started) {
+            return false;
+        }
+        return true;
+    }
+
+    public function start() {
+        $this->model->start($this->id);
+        $this->turn(1);
+        (new PlayersInGames())->removeNotConfirmedPlayers($this->id);
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function start() {
-        return $this->model->startGame($this->id);
+    public function exists() {
+        $s = $this->model->exists($this->id);
+        if (empty($s)) {
+            return false;
+        }
+        return true;
     }
 
-    public function players() {
-//        (new PlayersInGames())->
+    /**
+     * @param int $playerId
+     */
+    public function addPlayer($playerId) {
+        (new PlayersInGames())->addPlayerToGame($playerId, $this->id);
     }
-} 
+
+    /**
+     * @param int $playerId
+     */
+    public function playerConfirmed($playerId) {
+        (new PlayersInGames())->playerConfirmed($playerId, $this->id);
+        $this->model->addPlayer($this->id);
+    }
+
+    /**
+     * @return array
+     */
+    public function players() {
+        return (new PlayersInGames())->players($this->id);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $game['id'] = $this->id;
+        $game['numOfPlayers'] = $this->numOfPlayers();
+        $game['players'] = $this->players();
+        return $game;
+    }
+}

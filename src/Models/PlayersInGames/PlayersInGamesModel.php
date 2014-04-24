@@ -7,9 +7,6 @@ use reClick\Models\BaseModel;
 
 class PlayersInGamesModel extends BaseModel {
 
-    const NOT_FIRST_PLAYER = 0;
-    const FIRST_PLAYER_TURN = 1;
-
     public function __construct() {
         parent::__construct();
         $this->table = 'players_in_games';
@@ -18,23 +15,11 @@ class PlayersInGamesModel extends BaseModel {
     /**
      * @param int $playerId
      * @param int $gameId
-     * @param int $turn
-     * @param int $isFirstPlayer
      */
-    public function addPlayerToGame(
-        $playerId,
-        $gameId,
-        $turn,
-        $isFirstPlayer = self::NOT_FIRST_PLAYER
-    ) {
+    public function addPlayerToGame($playerId, $gameId) {
         $this->db->insert(
             $this->table,
-            [
-                'player_id' => $playerId,
-                'game_id' => $gameId,
-                'turn' => $turn,
-                'confirmed' => $isFirstPlayer
-            ]
+            ['player_id' => $playerId, 'game_id' => $gameId]
         );
     }
 
@@ -87,7 +72,7 @@ class PlayersInGamesModel extends BaseModel {
      * @param int $playerId
      * @param int $gameId
      */
-    public function deletePlayerFromGame($playerId, $gameId) {
+    public function removePlayerFromGame($playerId, $gameId) {
         $this->db->delete(
             $this->table,
             [
@@ -135,11 +120,21 @@ class PlayersInGamesModel extends BaseModel {
     public function players($gameId) {
         return $this->db->select(
             $this->table,
-            ['player_id'],
-            [
-                'game_id' => $gameId,
-                'confirmed' => 1
-            ]
+            ['player_id as id', 'turn', 'confirmed'],
+            ['game_id' => $gameId]
         )->fetchAll();
+    }
+
+    /**
+     * @param int $playerId
+     * @param int $gameId
+     * @return string
+     */
+    public function getConfirmation($playerId, $gameId) {
+        return $this->db->select(
+            $this->table,
+            ['confirmed'],
+            ['player_id' => $playerId, 'game_id' => $gameId]
+        )->fetchValue();
     }
 }

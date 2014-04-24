@@ -50,6 +50,26 @@ class GameModel extends BaseModel {
      * @return int
      */
     public function start($id) {
-        return $this->setOne($id, 'start', 1);
+        return $this->setOne($id, 'started', 1);
+    }
+
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function exists($id) {
+        return $this->getOne($id, 'id');
+    }
+
+    /**
+     * @param int $id
+     * @return int
+     */
+    public function addPlayer($id) {
+        return $this->setOne(
+            $id,
+            'num_of_players',
+            (int) $this->numOfPlayers($id) + 1
+        );
     }
 } 

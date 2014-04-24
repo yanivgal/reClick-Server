@@ -6,8 +6,42 @@ use reClick\GCM\GCM;
 
 $app = new \Slim\Slim();
 
-$app->post('/signup/', ['reClick\Routes\Session', 'signUp']);
-$app->post('/login/?(hash/:hash/?)', ['reClick\Routes\Session', 'login']);
+/* Session Routes */
+$app->post(
+    '/signup/',
+    ['reClick\Routes\SessionRouter', 'signUp']
+);
+$app->post(
+    '/login/?(hash/:hash/?)',
+    ['reClick\Routes\SessionRouter', 'login']
+);
+
+/* Game Routes */
+$app->get(
+    '/games/',
+    ['reClick\Routes\GameRouter', 'getOpenGames']
+);
+$app->get(
+    '/games/:gameId',
+    ['reClick\Routes\GameRouter', 'getGame']
+);
+$app->post(
+    '/games/',
+    ['reClick\Routes\GameRouter', 'createGame']
+);
+$app->post(
+    '/games/:gameId/players/:username',
+    ['reClick\Routes\GameRouter', 'addPlayerToGame']
+);
+$app->put(
+    '/games/:gameId/players/:username',
+    ['reClick\Routes\GameRouter', 'playerConfirmed']
+);
+$app->post(
+    '/games/:gameId/start',
+    ['reClick\Routes\GameRouter', 'startGame']
+);
+
 
 $app->post('/', function() use ($app) {
 
@@ -31,25 +65,7 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
-    echo '<pre>';
-    print_r((new \reClick\Controllers\Games\Games())
-        ->getAllOpenGames());
+
 });
 
 $app->run();
-
-/**
- * @param array $requestObject
- * @param array $expectedVars
- * @return array
- */
-function initRequestVars($requestObject, $expectedVars) {
-    $initVars = [];
-
-    foreach ($expectedVars as $expectedVar) {
-        $initVars[$expectedVar] = isset($requestObject[$expectedVar])
-            ? $requestObject[$expectedVar] : null;
-    }
-
-    return $initVars;
-}

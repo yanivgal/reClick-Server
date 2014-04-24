@@ -20,8 +20,11 @@ class Games {
     /**
      * @return array
      */
-    public function getAllOpenGames() {
-        return $this->model->getAllOpenGames();
+    public function getOpenGames() {
+        $games = $this->model->getOpenGames();
+        foreach ($games as $i => $game) {
+            $games[$i] = (new Game($game['id']))->toArray();
+        }
+        return $games;
     }
-
 } 
