@@ -27,7 +27,7 @@ class GamesModel extends BaseModel {
     public function getOpenGames() {
         return $this->db->select(
             $this->table,
-            ['id', 'num_of_players'],
+            ['id', 'num_of_players as numOfPlayers'],
             ['started' => 0]
         )->fetchAll();
     }
