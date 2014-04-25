@@ -1,4 +1,5 @@
 .idea/
+ini/
 database.ini
 gcm.ini
 vendor/
