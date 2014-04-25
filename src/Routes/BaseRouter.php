@@ -3,8 +3,25 @@
 namespace reClick\Routes;
 
 use reClick\Framework\ResponseMessage;
+use Slim\Slim;
 
-class BaseRouter {
+abstract class BaseRouter {
+
+    /**
+     * @var null|\Slim\Slim
+     */
+//    protected $app;
+
+    protected function __construct()
+    {
+//        $this->app = Slim::getInstance();
+        $this->initializeRoutes();
+    }
+
+    /**
+     * Implement all relevant routes here
+     */
+    protected abstract function initializeRoutes();
 
     /**
      * @param array $requestObject

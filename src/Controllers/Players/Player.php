@@ -15,6 +15,11 @@ class Player extends BaseController {
     const RAW_PASSWORD = false;
 
     /**
+     * @var \reClick\Controllers\PlayersInGames\PlayersInGames
+     */
+    private $playersInGames;
+
+    /**
      * @param int|string $identifier Player's ID|Username
      */
     public function __construct($identifier) {
@@ -25,6 +30,8 @@ class Player extends BaseController {
         } else {
             parent::__construct($this->model->getIdFromUsername($identifier));
         }
+
+        $this->playersInGames = new PlayersInGames();
     }
 
     /**
@@ -80,7 +87,7 @@ class Player extends BaseController {
      * @return bool
      */
     public function alreadyConfirmed($gameId) {
-        return (new PlayersInGames())->getConfirmation($this->id, $gameId)
+        return $this->playersInGames->getConfirmation($this->id, $gameId)
             ? true : false;
     }
 } 

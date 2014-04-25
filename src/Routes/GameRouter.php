@@ -10,6 +10,20 @@ use reClick\Controllers\Games\Game;
 
 class GameRouter extends BaseRouter {
 
+    private $app;
+    public function __construct() {
+        $this->app = Slim::getInstance();
+        parent::__construct();
+    }
+
+    protected function initializeRoutes() {
+        $app = Slim::getInstance();
+        $app->get(
+            '/games/',
+            [$this, 'getOpenGames']
+        );
+    }
+
     public function getOpenGames() {
         (new ResponseMessage(ResponseMessage::SUCCESS))
             ->addData('games', (new Games())->getOpenGames())

@@ -9,6 +9,16 @@ use reClick\Framework\ResponseMessage;
 
 class SessionRouter extends BaseRouter {
 
+    private $app;
+    public function __construct() {
+        $this->app = Slim::getInstance();
+        parent::__construct();
+    }
+
+    protected function initializeRoutes() {
+
+    }
+
     public function signUp() {
         $app = Slim::getInstance();
 

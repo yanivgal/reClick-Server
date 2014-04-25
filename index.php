@@ -5,6 +5,8 @@ require 'vendor/autoload.php';
 use reClick\GCM\GCM;
 
 $app = new \Slim\Slim();
+new \reClick\Framework\Bootstrap();
+//new \reClick\Routes\GameRouter();
 
 /* Session Routes */
 $app->post(
@@ -17,10 +19,10 @@ $app->post(
 );
 
 /* Game Routes */
-$app->get(
-    '/games/',
-    ['reClick\Routes\GameRouter', 'getOpenGames']
-);
+//$app->get(
+//    '/games/',
+//    ['reClick\Routes\GameRouter', 'getOpenGames']
+//);
 $app->get(
     '/games/:gameId',
     ['reClick\Routes\GameRouter', 'getGame']

@@ -9,11 +9,17 @@ use reClick\Models\Games\GameModel;
 class Game extends BaseController {
 
     /**
+     * @var \reClick\Controllers\PlayersInGames\PlayersInGames
+     */
+    private $playersInGames;
+
+    /**
      * @param int $id Game ID
      */
     public function __construct($id) {
         parent::__construct($id);
         $this->model = new GameModel();
+        $this->playersInGames = new PlayersInGames();
     }
 
     /**
@@ -53,7 +59,7 @@ class Game extends BaseController {
     public function start() {
         $this->model->start($this->id);
         $this->turn(1);
-        (new PlayersInGames())->removeNotConfirmedPlayers($this->id);
+        $this->playersInGames->removeNotConfirmedPlayers($this->id);
     }
 
     /**
@@ -71,14 +77,14 @@ class Game extends BaseController {
      * @param int $playerId
      */
     public function addPlayer($playerId) {
-        (new PlayersInGames())->addPlayerToGame($playerId, $this->id);
+        $this->playersInGames->addPlayerToGame($playerId, $this->id);
     }
 
     /**
      * @param int $playerId
      */
     public function playerConfirmed($playerId) {
-        (new PlayersInGames())->playerConfirmed($playerId, $this->id);
+        $this->playersInGames->playerConfirmed($playerId, $this->id);
         $this->model->addPlayer($this->id);
     }
 
@@ -86,7 +92,7 @@ class Game extends BaseController {
      * @return array
      */
     public function players() {
-        return (new PlayersInGames())->players($this->id);
+        return $this->playersInGames->players($this->id);
     }
 
     /**
