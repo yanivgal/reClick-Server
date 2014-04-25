@@ -2,30 +2,52 @@
 
 namespace reClick\Routes;
 
-use reClick\Controllers\Players\Player;
 use Slim\Slim;
+use reClick\Controllers\Players\Player;
 use reClick\Controllers\Games\Games;
 use reClick\Framework\ResponseMessage;
 use reClick\Controllers\Games\Game;
 
 class GameRouter extends BaseRouter {
 
-    private $app;
     public function __construct() {
-        $this->app = Slim::getInstance();
         parent::__construct();
     }
 
     protected function initializeRoutes() {
-        $app = Slim::getInstance();
-        $app->get(
+        $this->app->get(
             '/games/',
             [$this, 'getOpenGames']
+        );
+
+        $this->app->get(
+            '/games/:gameId',
+            [$this, 'getGame']
+        );
+
+        $this->app->post(
+            '/games/',
+            [$this, 'createGame']
+        );
+
+        $this->app->post(
+            '/games/:gameId/players/:username',
+            [$this, 'addPlayerToGame']
+        );
+
+        $this->app->put(
+            '/games/:gameId/players/:username',
+            [$this, 'playerConfirmed']
+        );
+
+        $this->app->post(
+            '/games/:gameId/start',
+            [$this, 'startGame']
         );
     }
 
     public function getOpenGames() {
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('games', (new Games())->getOpenGames())
             ->send();
     }
@@ -37,13 +59,13 @@ class GameRouter extends BaseRouter {
         $game = new Game($gameId);
 
         if (!$game->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Game does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game does not exist')
                 ->send();
             exit;
         }
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())
             ->send();
     }
@@ -61,8 +83,8 @@ class GameRouter extends BaseRouter {
 
         $player = new Player($requestVars['username']);
         if (!$player->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Player does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
                 ->send();
             exit;
         }
@@ -71,7 +93,7 @@ class GameRouter extends BaseRouter {
         $game->addPlayer($player->id());
         $game->playerConfirmed($player->id());
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())
             ->send();
     }
@@ -83,23 +105,23 @@ class GameRouter extends BaseRouter {
     public function addPlayerToGame($gameId, $username) {
         $game = new Game($gameId);
         if (!$game->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Game does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game does not exist')
                 ->send();
             exit;
         }
 
         $player = new Player($username);
         if (!$player->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Player does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
                 ->send();
             exit;
         }
 
         $game->addPlayer($player->id());
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())
             ->send();
     }
@@ -111,30 +133,30 @@ class GameRouter extends BaseRouter {
     public function playerConfirmed($gameId, $username) {
         $game = new Game($gameId);
         if (!$game->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Game does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game does not exist')
                 ->send();
             exit;
         }
 
         $player = new Player($username);
         if (!$player->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Player does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
                 ->send();
             exit;
         }
 
         if ($player->alreadyConfirmed($gameId)) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Player already confirmed')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player already confirmed')
                 ->send();
             exit;
         }
 
         $game->playerConfirmed($player->id());
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())
             ->send();
     }
@@ -143,22 +165,22 @@ class GameRouter extends BaseRouter {
         $game = new Game($gameId);
 
         if (!$game->exists()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Game does not exist')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game does not exist')
                 ->send();
             exit;
         }
 
         if ($game->started()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Game already started')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game already started')
                 ->send();
             exit;
         }
 
         $game->start();
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())
             ->send();
     }

@@ -8,13 +8,13 @@ use Slim\Slim;
 abstract class BaseRouter {
 
     /**
-     * @var null|\Slim\Slim
+     * @var \Slim\Slim
      */
-//    protected $app;
+    protected $app;
 
     protected function __construct()
     {
-//        $this->app = Slim::getInstance();
+        $this->app = Slim::getInstance();
         $this->initializeRoutes();
     }
 
@@ -33,8 +33,8 @@ abstract class BaseRouter {
 
         foreach ($expectedVars as $expectedVar) {
             if (!isset($requestObject[$expectedVar])) {
-                (new ResponseMessage(ResponseMessage::FAILED))
-                    ->addData('message', $expectedVar . ' is required')
+                (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                    ->message($expectedVar . ' is required')
                     ->send();
                 exit;
             }

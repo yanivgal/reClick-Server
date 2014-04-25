@@ -9,14 +9,20 @@ use reClick\Framework\ResponseMessage;
 
 class SessionRouter extends BaseRouter {
 
-    private $app;
     public function __construct() {
-        $this->app = Slim::getInstance();
         parent::__construct();
     }
 
     protected function initializeRoutes() {
+        $this->app->post(
+            '/signup/',
+            ['reClick\Routes\SessionRouter', 'signUp']
+        );
 
+        $this->app->post(
+            '/login/?(hash/:hash/?)',
+            ['reClick\Routes\SessionRouter', 'login']
+        );
     }
 
     public function signUp() {
@@ -41,18 +47,18 @@ class SessionRouter extends BaseRouter {
                 $requestVars['gcmRegId']
             );
         } catch (\PDOException $e) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', $e->getMessage())
+            (new ResponseMessage(ResponseMessage::STATUS_ERROR))
+                ->message($e->getMessage())
                 ->send();
             exit;
         } catch (\Exception $e) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Some message')
+            (new ResponseMessage(ResponseMessage::STATUS_ERROR))
+                ->message($e->getMessage())
                 ->send();
             exit;
         }
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData(
                 'message',
                 'Hello ' . $player->nickname()
@@ -79,8 +85,8 @@ class SessionRouter extends BaseRouter {
         );
 
         if ($hash != 'true' && $hash != 'false') {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Hash should be true or false')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Hash should be true or false')
                 ->send();
             exit;
         }
@@ -94,15 +100,15 @@ class SessionRouter extends BaseRouter {
             $requestVars['password'];
 
         if ($requestVars['password'] != $player->password()) {
-            (new ResponseMessage(ResponseMessage::FAILED))
-                ->addData('message', 'Invalid Username or Password')
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Invalid Username or Password')
                 ->send();
             exit;
         }
 
         $player->gcmRegId($requestVars['gcmRegId']);
 
-        (new ResponseMessage(ResponseMessage::SUCCESS))
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData(
                 'message',
                 'Hello ' . $player->nickname()

@@ -6,44 +6,6 @@ use reClick\GCM\GCM;
 
 $app = new \Slim\Slim();
 new \reClick\Framework\Bootstrap();
-//new \reClick\Routes\GameRouter();
-
-/* Session Routes */
-$app->post(
-    '/signup/',
-    ['reClick\Routes\SessionRouter', 'signUp']
-);
-$app->post(
-    '/login/?(hash/:hash/?)',
-    ['reClick\Routes\SessionRouter', 'login']
-);
-
-/* Game Routes */
-//$app->get(
-//    '/games/',
-//    ['reClick\Routes\GameRouter', 'getOpenGames']
-//);
-$app->get(
-    '/games/:gameId',
-    ['reClick\Routes\GameRouter', 'getGame']
-);
-$app->post(
-    '/games/',
-    ['reClick\Routes\GameRouter', 'createGame']
-);
-$app->post(
-    '/games/:gameId/players/:username',
-    ['reClick\Routes\GameRouter', 'addPlayerToGame']
-);
-$app->put(
-    '/games/:gameId/players/:username',
-    ['reClick\Routes\GameRouter', 'playerConfirmed']
-);
-$app->post(
-    '/games/:gameId/start',
-    ['reClick\Routes\GameRouter', 'startGame']
-);
-
 
 $app->post('/', function() use ($app) {
 
