@@ -4,6 +4,8 @@ namespace reClick\Framework\Configs;
 
 class Config {
 
+    private $iniPath = 'ini';
+
     /**
      * @return DbConfig
      */
@@ -34,7 +36,7 @@ class Config {
      * @return array All ini file names as array
      */
     private function getAllIniFiles() {
-        $iniFiles = glob('*.ini');
+        $iniFiles = glob($this->iniPath . DIRECTORY_SEPARATOR . '*.ini');
 
         foreach ($iniFiles as $key => $path) {
             $iniFiles[pathinfo($path, PATHINFO_FILENAME)] = $path;
