@@ -12,6 +12,15 @@ class Db {
     private $statement;
 
     /**
+     * @param string $statement
+     */
+    public function exec($statement) {
+        $db = $this->connect();
+
+        $db->exec($statement);
+    }
+
+    /**
      * Executes an SQL statement created with raw query string from $queryString
      * and with bound values from $whereValues array
      *
@@ -257,13 +266,51 @@ class Db {
                 $dbConfig->password()
             );
             $dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             //TODO Print errors to log
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }
 
         return $dbh;
+    }
+
+    public function createTestDb() {
+        $dbConfig = (new Config())->db();
+
+        try {
+            $dbh = new \PDO(
+                $dbConfig->driver() . ':host=' . $dbConfig->host(),
+                $dbConfig->username(),
+                $dbConfig->password()
+            );
+
+            $dbh->exec('CREATE DATABASE IF NOT EXISTS ' . $dbConfig->dbName())
+            or die(print_r($dbh->errorInfo(), true));
+        } catch (\PDOException $e) {
+            //TODO Print errors to log
+            print "Error!: " . $e->getMessage() . "<br/>";
+            die();
+        }
+    }
+
+    public function dropTestDb() {
+        $dbConfig = (new Config())->db();
+
+        try {
+            $dbh = new \PDO(
+                $dbConfig->driver() . ':host=' . $dbConfig->host(),
+                $dbConfig->username(),
+                $dbConfig->password()
+            );
+
+            $dbh->exec('DROP DATABASE IF EXISTS ' . $dbConfig->dbName());
+//            or die(print_r($dbh->errorInfo(), true));
+        } catch (\PDOException $e) {
+            //TODO Print errors to log
+            print "Error!: " . $e->getMessage() . "<br/>";
+            die();
+        }
     }
 
     /**

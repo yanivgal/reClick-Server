@@ -15,6 +15,9 @@ class DbConfig extends BaseConfig {
      * @return string
      */
     public function dbName() {
+        if (getenv('TEST')) {
+            return getenv('DBNAME');
+        }
         return $this->getValue('dbname');
     }
 

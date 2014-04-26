@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    bootstrap="./bootstrap.php"
+    colors="false">
+
+    <testsuites>
+
+        <testsuite name="Blackbox">
+            <directory>./blackbox/</directory>
+        </testsuite>
+
+        <testsuite name="Whitebox">
+            <directory>./whitebox/</directory>
+        </testsuite>
+
+    </testsuites>
+
+</phpunit>

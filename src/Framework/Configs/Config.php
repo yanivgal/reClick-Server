@@ -4,14 +4,19 @@ namespace reClick\Framework\Configs;
 
 class Config {
 
-    private $iniPath = 'ini';
+    private $iniPath;
+
+    public function __construct() {
+        $this->iniPath = __DIR__ . '/../../../ini/';
+    }
 
     /**
      * @return DbConfig
      */
     public function db() {
+        $dbFile = getenv('TEST') ? 'database_test' : 'database';
         return new DbConfig(
-            $this->parseFile($this->getIniFile('database'))
+            $this->parseFile($this->getIniFile($dbFile))
         );
     }
 
@@ -36,7 +41,7 @@ class Config {
      * @return array All ini file names as array
      */
     private function getAllIniFiles() {
-        $iniFiles = glob($this->iniPath . DIRECTORY_SEPARATOR . '*.ini');
+        $iniFiles = glob($this->iniPath . '*.ini');
 
         foreach ($iniFiles as $key => $path) {
             $iniFiles[pathinfo($path, PATHINFO_FILENAME)] = $path;
