@@ -14,7 +14,7 @@ class GameRouter extends BaseRouter {
         parent::__construct();
     }
 
-    protected function initializeRoutes() {
+    protected  function initializeRoutes() {
         $this->app->get(
             '/games/',
             [$this, 'getOpenGames']
@@ -46,6 +46,9 @@ class GameRouter extends BaseRouter {
         );
     }
 
+    /**
+     * GET /games/
+     */
     public function getOpenGames() {
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('games', (new Games())->getOpenGames())
@@ -53,6 +56,8 @@ class GameRouter extends BaseRouter {
     }
 
     /**
+     * GET /games/:gameId
+     *
      * @param int $gameId
      */
     public function getGame($gameId) {
@@ -70,14 +75,17 @@ class GameRouter extends BaseRouter {
             ->send();
     }
 
+    /**
+     * POST /games/
+     */
     public function createGame() {
         $app = Slim::getInstance();
 
         $expectedVars = [
             'username'
         ];
-        $requestVars = parent::initRequestVars(
-            $app->request->get(),
+        $requestVars = parent::initJsonVars(
+            $app->request->getBody(),
             $expectedVars
         );
 
@@ -99,6 +107,8 @@ class GameRouter extends BaseRouter {
     }
 
     /**
+     * POST /games/:gameId/players/:username
+     *
      * @param int $gameId
      * @param string $username
      */
@@ -127,6 +137,8 @@ class GameRouter extends BaseRouter {
     }
 
     /**
+     * PUT /games/:gameId/players/:username
+     *
      * @param int $gameId
      * @param string $username
      */
@@ -161,6 +173,11 @@ class GameRouter extends BaseRouter {
             ->send();
     }
 
+    /**
+     * PUT /games/:gameId/start
+     *
+     * @param int $gameId
+     */
     public function startGame($gameId) {
         $game = new Game($gameId);
 

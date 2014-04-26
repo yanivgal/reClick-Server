@@ -15,7 +15,7 @@ class SessionRouter extends BaseRouter {
 
     protected function initializeRoutes() {
         $this->app->post(
-            '/signup/',
+            '/sign-up/',
             ['reClick\Routes\SessionRouter', 'signUp']
         );
 
@@ -25,6 +25,9 @@ class SessionRouter extends BaseRouter {
         );
     }
 
+    /**
+     * POST /sign-up/
+     */
     public function signUp() {
         $app = Slim::getInstance();
 
@@ -34,8 +37,8 @@ class SessionRouter extends BaseRouter {
             'nickname',
             'gcmRegId'
         ];
-        $requestVars = parent::initRequestVars(
-            $app->request->post(),
+        $requestVars = parent::initJsonVars(
+            $app->request->getBody(),
             $expectedVars
         );
 
@@ -59,16 +62,15 @@ class SessionRouter extends BaseRouter {
         }
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
-            ->addData(
-                'message',
-                'Hello ' . $player->nickname()
-            )
+            ->message('Hello ' . $player->nickname())
             ->addData('username', $player->username())
             ->addData('nickname', $player->nickname())
             ->send();
     }
 
     /**
+     * POST /login/?(hash/:hash/?)
+     *
      * @param string $hash
      */
     public function login($hash = 'false') {
@@ -79,8 +81,8 @@ class SessionRouter extends BaseRouter {
             'password',
             'gcmRegId'
         ];
-        $requestVars = parent::initRequestVars(
-            $app->request->post(),
+        $requestVars = parent::initJsonVars(
+            $app->request->getBody(),
             $expectedVars
         );
 
@@ -109,10 +111,7 @@ class SessionRouter extends BaseRouter {
         $player->gcmRegId($requestVars['gcmRegId']);
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
-            ->addData(
-                'message',
-                'Hello ' . $player->nickname()
-            )
+            ->message('Hello ' . $player->nickname())
             ->addData('username', $player->username())
             ->addData('nickname', $player->nickname())
             ->send();
