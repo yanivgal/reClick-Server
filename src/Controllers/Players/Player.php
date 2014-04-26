@@ -83,6 +83,13 @@ class Player extends BaseController {
     }
 
     /**
+     * @return array
+     */
+    public function games() {
+        return $this->playersInGames->games($this->id);
+    }
+
+    /**
      * @param int $gameId
      * @return bool
      */

@@ -11,10 +11,15 @@ class Games {
     }
 
     /**
+     * @param string $name
+     * @param string $description
      * @return Game
      */
-    public function create() {
-        return new Game($this->model->create());
+    public function create($name = null, $description = null) {
+        $name = isset($name) ? $name : $this->randGameName();
+        $description = isset($description) ? $description : 'Best game ever';
+
+        return new Game($this->model->create($name, $description));
     }
 
     /**
@@ -26,5 +31,9 @@ class Games {
             $games[$i] = (new Game($game['id']))->toArray();
         }
         return $games;
+    }
+
+    private function randGameName() {
+        return 'Game' . rand(100000, 1000000);
     }
 } 

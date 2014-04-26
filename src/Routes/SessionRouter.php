@@ -31,23 +31,17 @@ class SessionRouter extends BaseRouter {
     public function signUp() {
         $app = Slim::getInstance();
 
-        $expectedVars = [
-            'username',
-            'password',
-            'nickname',
-            'gcmRegId'
-        ];
-        $requestVars = parent::initJsonVars(
+        $vars = parent::initJsonVars(
             $app->request->getBody(),
-            $expectedVars
+            ['username', 'password', 'nickname', 'gcmRegId']
         );
 
         try {
             $player = (new Players())->create(
-                $requestVars['username'],
-                $requestVars['password'],
-                $requestVars['nickname'],
-                $requestVars['gcmRegId']
+                $vars['username'],
+                $vars['password'],
+                $vars['nickname'],
+                $vars['gcmRegId']
             );
         } catch (\PDOException $e) {
             (new ResponseMessage(ResponseMessage::STATUS_ERROR))
@@ -76,14 +70,9 @@ class SessionRouter extends BaseRouter {
     public function login($hash = 'false') {
         $app = Slim::getInstance();
 
-        $expectedVars = [
-            'username',
-            'password',
-            'gcmRegId'
-        ];
-        $requestVars = parent::initJsonVars(
+        $vars = parent::initJsonVars(
             $app->request->getBody(),
-            $expectedVars
+            ['username', 'password', 'gcmRegId']
         );
 
         if ($hash != 'true' && $hash != 'false') {
@@ -93,22 +82,22 @@ class SessionRouter extends BaseRouter {
             exit;
         }
 
-        $player = new Player($requestVars['username']);
+        $player = new Player($vars['username']);
 
         // Converts boolean string to real boolean
         $hash = filter_var($hash, FILTER_VALIDATE_BOOLEAN);
-        $requestVars['password'] = $hash ?
-            $player->hashPassword($requestVars['password']) :
-            $requestVars['password'];
+        $vars['password'] = $hash ?
+            $player->hashPassword($vars['password']) :
+            $vars['password'];
 
-        if ($requestVars['password'] != $player->password()) {
+        if ($vars['password'] != $player->password()) {
             (new ResponseMessage(ResponseMessage::STATUS_FAIL))
                 ->message('Invalid Username or Password')
                 ->send();
             exit;
         }
 
-        $player->gcmRegId($requestVars['gcmRegId']);
+        $player->gcmRegId($vars['gcmRegId']);
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->message('Hello ' . $player->nickname())

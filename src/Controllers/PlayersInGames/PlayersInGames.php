@@ -2,6 +2,7 @@
 
 namespace reClick\Controllers\PlayersInGames;
 
+use reClick\Controllers\Games\Game;
 use reClick\Models\PlayersInGames\PlayersInGamesModel;
 
 class PlayersInGames {
@@ -71,6 +72,20 @@ class PlayersInGames {
      */
     public function updateTurns($gameId, $removedTurn) {
         $this->model->updateTurns($gameId, $removedTurn);
+    }
+
+    /**
+     * @param int $playerId
+     * @return array
+     */
+    public function games($playerId) {
+        $gamesId = $this->model->games($playerId);
+        $games = [];
+        foreach ($gamesId as $gameId) {
+            $game = new Game($gameId['id']);
+            $games[] = $game->toArray();
+        }
+        return $games;
     }
 
     /**

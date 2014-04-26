@@ -114,6 +114,18 @@ class PlayersInGamesModel extends BaseModel {
     }
 
     /**
+     * @param int $playerId
+     * @return array
+     */
+    public function games($playerId) {
+        return $this->db->select(
+            $this->table,
+            ['game_id as id'],
+            ['player_id' => $playerId]
+        )->fetchAll();
+    }
+
+    /**
      * @param int $gameId
      * @return array
      */

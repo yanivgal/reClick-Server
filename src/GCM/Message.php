@@ -40,7 +40,7 @@ class Message {
     }
 
     /**
-     * @param array|null $data
+     * @param array $data
      * @return array|Message
      */
     public function data($data = null) {
@@ -72,7 +72,7 @@ class Message {
     /**
      * Gets/Sets the registrationIds property.
      *
-     * @param array|null $registrationIds
+     * @param array $registrationIds
      * @return array|Message
      */
     public function registrationIds($registrationIds = null) {
@@ -103,7 +103,7 @@ class Message {
     /**
      * Gets/Sets the collapseKey property.
      *
-     * @param string|null $collapseKey
+     * @param string $collapseKey
      * @return string|Message
      */
     public function collapseKey($collapseKey = null) {
@@ -113,7 +113,7 @@ class Message {
     /**
      * Gets/Sets the time to live, in seconds.
      *
-     * @param int|null $timeToLive
+     * @param int $timeToLive
      * @return int|Message
      */
     public function timeToLive($timeToLive = null) {
@@ -133,7 +133,7 @@ class Message {
     /**
      * Gets/Sets the restrictedPackageName property.
      *
-     * @param string|null $restrictedPackageName
+     * @param string $restrictedPackageName
      * @return string|Message
      */
     public function restrictedPackageName($restrictedPackageName = null) {
@@ -146,7 +146,7 @@ class Message {
     /**
      * Gets/Sets the dryRun property (default value is false).
      *
-     * @param boolean|null $dryRun
+     * @param boolean $dryRun
      * @return boolean|Message
      */
     public function dryRun($dryRun = null) {

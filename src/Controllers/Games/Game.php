@@ -23,6 +23,22 @@ class Game extends BaseController {
     }
 
     /**
+     * @param string $name
+     * @return string|int
+     */
+    public function name($name = null) {
+        return $this->model->name($this->id, $name);
+    }
+
+    /**
+     * @param string $description
+     * @return string|int
+     */
+    public function description($description = null) {
+        return $this->model->description($this->id, $description);
+    }
+
+    /**
      * @return string
      */
     public function numOfPlayers() {
@@ -31,7 +47,7 @@ class Game extends BaseController {
 
     /**
      * @param string $sequence
-     * @return int|string
+     * @return string|int
      */
     public function sequence($sequence = null) {
         return $this->model->sequence($this->id, $sequence);
@@ -43,6 +59,19 @@ class Game extends BaseController {
      */
     public function turn($turn = null) {
         return $this->model->turn($this->id, $turn);
+    }
+
+    /**
+     * @param string $name
+     * @param string $description
+     */
+    public function updateInfo($name, $description) {
+        if (isset($name)) {
+            $this->model->name($this->id, $name);
+        }
+        if (isset($description)) {
+            $this->model->description($this->id, $description);
+        }
     }
 
     /**
@@ -100,8 +129,11 @@ class Game extends BaseController {
      */
     public function toArray() {
         $game['id'] = $this->id;
+        $game['name'] = $this->name();
+        $game['description'] = $this->description();
         $game['numOfPlayers'] = $this->numOfPlayers();
         $game['players'] = $this->players();
+        $game['started'] = $this->started();
         return $game;
     }
 }

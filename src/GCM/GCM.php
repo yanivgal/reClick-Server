@@ -56,7 +56,7 @@ class GCM {
     }
 
     /**
-     * @param Message|null $message
+     * @param Message $message
      * @return GCM|Message
      */
     public function message(Message $message = null) {
@@ -101,7 +101,7 @@ class GCM {
      * Generic simple getter/setter
      *
      * @param string $property
-     * @param string|null $value
+     * @param string $value
      * @return Message|mixed
      */
     private function getterSetter($property, $value = null) {

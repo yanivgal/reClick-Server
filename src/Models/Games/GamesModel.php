@@ -12,12 +12,14 @@ class GamesModel extends BaseModel {
     }
 
     /**
+     * @param string $name
+     * @param string $description
      * @return int
      */
-    public function create() {
+    public function create($name, $description) {
         return $this->db->insert(
             $this->table,
-            []
+            ['name' => $name, 'description' => $description]
         );
     }
 
@@ -27,7 +29,7 @@ class GamesModel extends BaseModel {
     public function getOpenGames() {
         return $this->db->select(
             $this->table,
-            ['id', 'num_of_players as numOfPlayers'],
+            ['id', 'name', 'description', 'num_of_players as numOfPlayers'],
             ['started' => 0]
         )->fetchAll();
     }

@@ -13,6 +13,24 @@ class GameModel extends BaseModel {
 
     /**
      * @param int $id
+     * @param string $name
+     * @return string
+     */
+    public function name($id, $name = null) {
+        return $this->getSet($id, 'name', $name);
+    }
+
+    /**
+     * @param int $id
+     * @param string $description
+     * @return string
+     */
+    public function description($id, $description = null) {
+        return $this->getSet($id, 'description', $description);
+    }
+
+    /**
+     * @param int $id
      * @return string
      */
     public function numOfPlayers($id) {
@@ -21,7 +39,7 @@ class GameModel extends BaseModel {
 
     /**
      * @param int $id
-     * @param string|null $sequence
+     * @param string $sequence
      * @return mixed
      */
     public function sequence($id, $sequence = null) {

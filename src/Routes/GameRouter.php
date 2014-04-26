@@ -17,7 +17,7 @@ class GameRouter extends BaseRouter {
     protected  function initializeRoutes() {
         $this->app->get(
             '/games/',
-            [$this, 'getOpenGames']
+            [$this, 'getGames']
         );
 
         $this->app->get(
@@ -36,6 +36,11 @@ class GameRouter extends BaseRouter {
         );
 
         $this->app->put(
+            '/games/:gameId/',
+            [$this, 'updateGame']
+        );
+
+        $this->app->put(
             '/games/:gameId/players/:username',
             [$this, 'playerConfirmed']
         );
@@ -49,9 +54,32 @@ class GameRouter extends BaseRouter {
     /**
      * GET /games/
      */
-    public function getOpenGames() {
+    public function getGames() {
+        $app = Slim::getInstance();
+
+        $vars = parent::initGetVars(
+            $app->request->get(),
+            [],
+            ['username']
+        );
+
+        if (!isset($vars['username'])) {
+            (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+                ->addData('games', (new Games())->getOpenGames())
+                ->send();
+            exit;
+        }
+
+        $player = new Player($vars['username']);
+        if (!$player->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
+                ->send();
+            exit;
+        }
+
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
-            ->addData('games', (new Games())->getOpenGames())
+            ->addData('games', $player->games())
             ->send();
     }
 
@@ -81,15 +109,13 @@ class GameRouter extends BaseRouter {
     public function createGame() {
         $app = Slim::getInstance();
 
-        $expectedVars = [
-            'username'
-        ];
-        $requestVars = parent::initJsonVars(
+        $vars = parent::initJsonVars(
             $app->request->getBody(),
-            $expectedVars
+            ['username'],
+            ['gameName', 'gameDescription']
         );
 
-        $player = new Player($requestVars['username']);
+        $player = new Player($vars['username']);
         if (!$player->exists()) {
             (new ResponseMessage(ResponseMessage::STATUS_FAIL))
                 ->message('Player does not exist')
@@ -97,7 +123,10 @@ class GameRouter extends BaseRouter {
             exit;
         }
 
-        $game = (new Games())->create();
+        $game = (new Games())->create(
+            $vars['gameName'],
+            $vars['gameDescription']
+        );
         $game->addPlayer($player->id());
         $game->playerConfirmed($player->id());
 
@@ -130,6 +159,33 @@ class GameRouter extends BaseRouter {
         }
 
         $game->addPlayer($player->id());
+
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->addData('game', $game->toArray())
+            ->send();
+    }
+
+    /**
+     * @param int $gameId
+     */
+    public function updateGame($gameId) {
+        $game = new Game($gameId);
+        if (!$game->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game does not exist')
+                ->send();
+            exit;
+        }
+
+        $app = Slim::getInstance();
+
+        $vars = parent::initJsonVars(
+            $app->request->getBody(),
+            [],
+            [ 'gameName', 'gameDescription']
+        );
+
+        $game->updateInfo($vars['gameName'], $vars['gameDescription']);
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())

@@ -24,29 +24,59 @@ abstract class BaseRouter {
 
     /**
      * @param string $requestBody
-     * @param array $expectedVars
+     * @param array $requiredVars
+     * @param array $optionalVars
      * @return array
      */
-    public function initJsonVars($requestBody, $expectedVars) {
-        return self::initVars($requestBody, $expectedVars, 'json');
+    public function initJsonVars(
+        $requestBody,
+        $requiredVars,
+        $optionalVars = []
+    ) {
+        return self::initVars(
+            $requestBody,
+            'json',
+            $requiredVars,
+            $optionalVars
+        );
     }
 
     /**
      * @param array $getObject
-     * @param array $expectedVars
+     * @param array $requiredVars
+     * @param array $optionalVars
      * @return array
      */
-    public function initGetVars($getObject, $expectedVars) {
-        return self::initVars($getObject, $expectedVars, 'get');
+    public function initGetVars(
+        $getObject,
+        $requiredVars,
+        $optionalVars = []
+    ) {
+        return self::initVars(
+            $getObject,
+            'get',
+            $requiredVars,
+            $optionalVars
+        );
     }
 
     /**
      * @param string|array $request
-     * @param array $expectedVars
+     * @param array $requiredVars
+     * @param array $optionalVars
      * @param string $method
      * @return array
      */
-    private function initVars($request, $expectedVars, $method) {
+    private function initVars(
+        $request,
+        $method,
+        $requiredVars,
+        $optionalVars = []
+    ) {
+        $requiredVars = isset($requiredVars) ? $requiredVars : [];
+        $optionalVars = isset($optionalVars) ? $optionalVars : [];
+
+
         if ($method != 'get') {
             $requestVars = json_decode($request, true);
             if (json_last_error() != JSON_ERROR_NONE) {
@@ -55,19 +85,28 @@ abstract class BaseRouter {
                     ->send();
                 exit;
             }
+        } else {
+            $requestVars = $request;
         }
 
         $initVars = [];
-        foreach ($expectedVars as $expectedVar) {
-            if (!isset($requestVars[$expectedVar])) {
+
+        foreach ($requiredVars as $requiredVar) {
+            if (!isset($requestVars[$requiredVar])) {
                 (new ResponseMessage(ResponseMessage::STATUS_FAIL))
-                    ->message($expectedVar . ' is required as ' . $method
+                    ->message($requiredVar . ' is required as ' . $method
                         . ' parameter')
                     ->send();
                 exit;
             }
-            $initVars[$expectedVar] = $requestVars[$expectedVar];
+            $initVars[$requiredVar] = $requestVars[$requiredVar];
         }
+
+        foreach ($optionalVars as $optionalVar) {
+            $initVars[$optionalVar] = isset($requestVars[$optionalVar])
+                ? $requestVars[$optionalVar] : null;
+        }
+
         return $initVars;
     }
-} 
+}
