@@ -12,6 +12,8 @@ class Db {
     private $statement;
 
     /**
+     * Executes raw SQL statement
+     *
      * @param string $statement
      */
     public function exec($statement) {
@@ -22,17 +24,17 @@ class Db {
 
     /**
      * Executes an SQL statement created with raw query string from $queryString
-     * and with bound values from $whereValues array
+     * and with bound values from $values array
      *
      * @param string $queryString
-     * @param array $whereValues
+     * @param array $values
      * @return mixed
      */
-    public function query($queryString, $whereValues = []) {
+    public function query($queryString, $values = []) {
         $db = $this->connect();
 
         $this->statement = $db->prepare($queryString);
-        $this->bindValues($whereValues);
+        $this->bindValues($values);
         $this->statement->execute();
 
         return $this;
@@ -215,6 +217,7 @@ class Db {
         $res = $this->statement->fetchAll();
 
         foreach ($res as $rowName => $row) {
+            $firstVal = '';
             foreach ($row as $col => $val) {
                 if ($val = $row[0]) {
                     $firstVal = $val;
@@ -223,7 +226,7 @@ class Db {
                     unset($res[$rowName][$col]);
                 }
             }
-            $res[$val] = $res[$rowName];
+            $res[$firstVal] = $res[$rowName];
             unset($res[$rowName]);
         }
 
@@ -366,7 +369,7 @@ class Db {
                 $divider = ', ';
                 break;
             default:
-                return;
+                return '';
         }
 
         $clause = $clauseType . ' ';
