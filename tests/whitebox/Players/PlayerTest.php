@@ -4,8 +4,11 @@ namespace reClick\tests\whitebox\Players;
 
 use reClick\Controllers\Players\Player;
 use reClick\Controllers\Players\Players;
+use reClick\Traits\TestsTrait;
 
 class PlayerTest extends \PHPUnit_Framework_TestCase {
+
+    use TestsTrait;
 
     /**
      * @expectedException \PDOException
@@ -108,29 +111,5 @@ class PlayerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($newPassword, $player->password());
         $this->assertEquals($newNickname, $player->nickname());
         $this->assertEquals($newGcmRegId, $player->gcmRegId());
-    }
-
-    private function randUserame() {
-        return $this->rand('username');
-    }
-
-    private function randPassword() {
-        return $this->rand('passwors');
-    }
-
-    private function randNickname() {
-        return $this->rand('nickname');
-    }
-
-    private function randGcmRegId() {
-        return sha1($this->rand('gcm')) . sha1($this->rand('gcm'));
-    }
-
-    private function rand($prefix) {
-        return $prefix . rand(1, 1000000);
-    }
-
-    private function hashPassword($password) {
-        return md5($password);
     }
 } 

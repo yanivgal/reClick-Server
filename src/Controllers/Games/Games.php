@@ -25,6 +25,17 @@ class Games {
     /**
      * @return array
      */
+    public function getAllGames() {
+        $games = $this->model->getAllGames();
+        foreach ($games as $i => $game) {
+            $games[$i] = (new Game($game['id']))->toArray();
+        }
+        return $games;
+    }
+
+    /**
+     * @return array
+     */
     public function getOpenGames() {
         $games = $this->model->getOpenGames();
         foreach ($games as $i => $game) {
@@ -33,6 +44,16 @@ class Games {
         return $games;
     }
 
+    /**
+     * @return int
+     */
+    public function deleteAllGames() {
+        return $this->model->deleteAllGames();
+    }
+
+    /**
+     * @return string
+     */
     private function randGameName() {
         return 'Game' . rand(100000, 1000000);
     }
