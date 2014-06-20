@@ -91,6 +91,7 @@ class InGameRouter extends BaseRouter {
                 'message',
                 $player->nickname() . ' played his move, now it\' your turn '
             )
+            ->addData('sequence', $game->sequence())
             ->addRegistrationId($game->currentPlayer()->gcmRegId());
         $gcm->sendMessage();
 
