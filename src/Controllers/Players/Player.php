@@ -83,6 +83,28 @@ class Player extends BaseController {
     }
 
     /**
+     * @param int $gameId
+     * @return bool
+     */
+    public function existsInGame($gameId) {
+        $games = $this->games();
+        foreach ($games as $game) {
+            if ($game['id'] == $gameId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param int $gameId
+     * @return string
+     */
+    public function turnInGame($gameId) {
+        return $this->playersInGames->getPlayerTurn($this->id, $gameId);
+    }
+
+    /**
      * @return array
      */
     public function games() {

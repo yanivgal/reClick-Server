@@ -71,6 +71,19 @@ class PlayersInGamesModel extends BaseModel {
     /**
      * @param int $playerId
      * @param int $gameId
+     * @return string
+     */
+    public function getPlayerTurn($playerId, $gameId) {
+        return $this->db->select(
+            $this->table,
+            ['turn'],
+            ['player_id' => $playerId, 'game_id' => $gameId]
+        )->fetchValue();
+    }
+
+    /**
+     * @param int $playerId
+     * @param int $gameId
      */
     public function removePlayerFromGame($playerId, $gameId) {
         $this->db->delete(
@@ -87,8 +100,7 @@ class PlayersInGamesModel extends BaseModel {
      * @param int $removedTurn
      */
     public function updateTurns($gameId, $removedTurn) {
-        $db = new Db();
-        $db->query(
+        $this->db->query(
             'UPDATE players_in_games
              SET    turn = turn - 1
              WHERE  game_id = ?
@@ -135,6 +147,32 @@ class PlayersInGamesModel extends BaseModel {
             ['player_id as id', 'turn', 'confirmed'],
             ['game_id' => $gameId]
         )->fetchAll();
+    }
+
+    /**
+     * @param int $gameId
+     * @param int $turn
+     * @return string
+     */
+    public function getPlayerByTurn($gameId, $turn) {
+        return $this->db->select(
+            $this->table,
+            ['player_id as id'],
+            ['game_id' => $gameId, 'turn' => $turn]
+        )->fetchValue();
+    }
+
+    /**
+     * @param int $gameId
+     * @return string
+     */
+    public function getGameMaxTurn($gameId) {
+        return $this->db->select(
+            $this->table,
+            ['max(turn) as turn'],
+            ['game_id' => $gameId]
+        )->fetchValue();
+
     }
 
     /**

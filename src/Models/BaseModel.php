@@ -70,4 +70,12 @@ class BaseModel {
         return $this->getOne($id,$column);
     }
 
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function exists($id) {
+        return $this->getOne($id, 'id');
+    }
+
 } 

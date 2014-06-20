@@ -32,4 +32,8 @@ $app->get('/', function() use ($app) {
 
 });
 
+$app->delete('/', function() use ($app) {
+    print 'h';
+});
+
 $app->run();

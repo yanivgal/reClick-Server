@@ -8,20 +8,20 @@ use reClick\Controllers\Games\Games;
 use reClick\Framework\ResponseMessage;
 use reClick\Controllers\Games\Game;
 
-class GameRouter extends BaseRouter {
+class PreGameRouter extends BaseRouter {
 
     public function __construct() {
         parent::__construct();
     }
 
-    protected  function initializeRoutes() {
+    protected function initializeRoutes() {
         $this->app->get(
             '/games/',
             [$this, 'getGames']
         );
 
         $this->app->get(
-            '/games/:gameId',
+            '/games/:gameId/',
             [$this, 'getGame']
         );
 
@@ -31,8 +31,8 @@ class GameRouter extends BaseRouter {
         );
 
         $this->app->post(
-            '/games/:gameId/players/:username',
-            [$this, 'addPlayerToGame']
+            '/games/:gameId/players/:username/',
+            [$this, 'invitePlayerToGame']
         );
 
         $this->app->put(
@@ -41,12 +41,12 @@ class GameRouter extends BaseRouter {
         );
 
         $this->app->put(
-            '/games/:gameId/players/:username',
+            '/games/:gameId/players/:username/',
             [$this, 'playerConfirmed']
         );
 
         $this->app->post(
-            '/games/:gameId/start',
+            '/games/:gameId/start/',
             [$this, 'startGame']
         );
     }
@@ -141,7 +141,7 @@ class GameRouter extends BaseRouter {
      * @param int $gameId
      * @param string $username
      */
-    public function addPlayerToGame($gameId, $username) {
+    public function invitePlayerToGame($gameId, $username) {
         $game = new Game($gameId);
         if (!$game->exists()) {
             (new ResponseMessage(ResponseMessage::STATUS_FAIL))
@@ -157,15 +157,24 @@ class GameRouter extends BaseRouter {
                 ->send();
             exit;
         }
+        if ($player->existsInGame($gameId)) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player already was invited')
+                ->send();
+            exit;
+        }
 
         $game->addPlayer($player->id());
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->message('Player was invited to game')
             ->addData('game', $game->toArray())
             ->send();
     }
 
     /**
+     * PUT /games/:gameId/
+     *
      * @param int $gameId
      */
     public function updateGame($gameId) {
@@ -225,6 +234,7 @@ class GameRouter extends BaseRouter {
         $game->playerConfirmed($player->id());
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->message('Player joined the game')
             ->addData('game', $game->toArray())
             ->send();
     }

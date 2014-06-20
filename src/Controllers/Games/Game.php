@@ -3,6 +3,7 @@
 namespace reClick\Controllers\Games;
 
 use reClick\Controllers\BaseController;
+use reClick\Controllers\Players\Player;
 use reClick\Controllers\PlayersInGames\PlayersInGames;
 use reClick\Models\Games\GameModel;
 
@@ -62,6 +63,13 @@ class Game extends BaseController {
     }
 
     /**
+     * @return string
+     */
+    public function maxTurn() {
+        return $this->playersInGames->getGameMaxTurn($this->id);
+    }
+
+    /**
      * @param string $name
      * @param string $description
      */
@@ -112,6 +120,14 @@ class Game extends BaseController {
     /**
      * @param int $playerId
      */
+    public function removePlayer($playerId) {
+        $this->playersInGames->removePlayer($playerId, $this->id);
+        $this->model->removePlayer($this->id);
+    }
+
+    /**
+     * @param int $playerId
+     */
     public function playerConfirmed($playerId) {
         $this->playersInGames->playerConfirmed($playerId, $this->id);
         $this->model->addPlayer($this->id);
@@ -125,15 +141,45 @@ class Game extends BaseController {
     }
 
     /**
+     * @return Player
+     */
+    public function currentPlayer() {
+        $playerId = $this->playersInGames->getPlayerByTurn(
+            $this->id,
+            $this->turn()
+        );
+        return new Player($playerId);
+    }
+
+    /**
+     * @return Player
+     */
+    public function previousPlayer() {
+        $currentTurn = $this->turn();
+        if ($currentTurn == 1) {
+            $previousTurn = $this->maxTurn();
+        } else {
+            $previousTurn = $currentTurn--;
+        }
+        $playerId = $this->playersInGames->getPlayerByTurn(
+            $this->id,
+            $previousTurn
+        );
+        return new Player($playerId);
+    }
+
+    /**
      * @return array
      */
     public function toArray() {
-        $game['id'] = $this->id;
-        $game['name'] = $this->name();
-        $game['description'] = $this->description();
-        $game['numOfPlayers'] = $this->numOfPlayers();
-        $game['players'] = $this->players();
-        $game['started'] = $this->started();
+        $game = [
+            'id' => $this->id,
+            'name' => $this->name(),
+            'description' => $this->description(),
+            'numOfPlayers' => $this->numOfPlayers(),
+            'players' => $this->players(),
+            'started' => $this->started()
+        ];
         return $game;
     }
 }
