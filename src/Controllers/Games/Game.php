@@ -156,11 +156,7 @@ class Game extends BaseController {
      */
     public function previousPlayer() {
         $currentTurn = $this->turn();
-        if ($currentTurn == 1) {
-            $previousTurn = $this->maxTurn();
-        } else {
-            $previousTurn = $currentTurn--;
-        }
+        $previousTurn = $currentTurn == 1 ? $this->maxTurn() : $currentTurn - 1;
         $playerId = $this->playersInGames->getPlayerByTurn(
             $this->id,
             $previousTurn
@@ -181,5 +177,19 @@ class Game extends BaseController {
             'started' => $this->started()
         ];
         return $game;
+    }
+
+    /**
+     * @param string $sequence
+     */
+    public function playerMove($sequence) {
+        $this->sequence($sequence);
+        $this->setNextTurn();
+    }
+
+    private function setNextTurn() {
+        $currentTurn = $this->turn();
+        $nextTurn = $currentTurn == $this->maxTurn() ? 1 : $currentTurn + 1;
+        $this->turn($nextTurn);
     }
 }
