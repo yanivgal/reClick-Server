@@ -73,14 +73,6 @@ class GameModel extends BaseModel {
 
     /**
      * @param int $id
-     * @return string
-     */
-    public function exists($id) {
-        return $this->getOne($id, 'id');
-    }
-
-    /**
-     * @param int $id
      * @return int
      */
     public function addPlayer($id) {
@@ -88,6 +80,18 @@ class GameModel extends BaseModel {
             $id,
             'num_of_players',
             (int) $this->numOfPlayers($id) + 1
+        );
+    }
+
+    /**
+     * @param int $id
+     * @return int
+     */
+    public function removePlayer($id) {
+        return $this->setOne(
+            $id,
+            'num_of_players',
+            (int) $this->numOfPlayers($id) - 1
         );
     }
 } 

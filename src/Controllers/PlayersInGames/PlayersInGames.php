@@ -49,9 +49,22 @@ class PlayersInGames {
     /**
      * @param int $playerId
      * @param int $gameId
+     * @return string
+     */
+    public function getPlayerTurn($playerId, $gameId) {
+        return $this->model->getPlayerTurn($playerId, $gameId);
+    }
+
+    /**
+     * @param int $playerId
+     * @param int $gameId
      */
     public function removePlayer($playerId, $gameId) {
+        $playerTurn = $this->getPlayerTurn($playerId, $gameId);
         $this->model->removePlayerFromGame($playerId, $gameId);
+        if ($playerTurn > 0) {
+            $this->updateTurns($gameId, $playerTurn);
+        }
     }
 
     /**
@@ -64,6 +77,15 @@ class PlayersInGames {
                 $this->removePlayer($player['id'], $gameId);
             }
         }
+    }
+
+    /**
+     * @param int $gameId
+     * @param int $turn
+     * @return int
+     */
+    public function getPlayerByTurn($gameId, $turn) {
+        return $this->model->getPlayerByTurn($gameId, $turn);
     }
 
     /**
@@ -86,6 +108,14 @@ class PlayersInGames {
             $games[] = $game->toArray();
         }
         return $games;
+    }
+
+    /**
+     * @param int $gameId
+     * @return string
+     */
+    public function getGameMaxTurn($gameId) {
+        return $this->model->getGameMaxTurn($gameId);
     }
 
     /**

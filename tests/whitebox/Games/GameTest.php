@@ -35,4 +35,4 @@ class GameTest extends \PHPUnit_Framework_TestCase {
         $game = new Game($this->rand(''));
         $this->assertFalse($game->exists());
     }
-} 
+}
