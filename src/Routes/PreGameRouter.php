@@ -2,6 +2,7 @@
 
 namespace reClick\Routes;
 
+use reClick\GCM\GCM;
 use Slim\Slim;
 use reClick\Controllers\Players\Player;
 use reClick\Controllers\Games\Games;
@@ -32,6 +33,11 @@ class PreGameRouter extends BaseRouter {
 
         $this->app->post(
             '/games/:gameId/players/:username/',
+            [$this, 'addPlayerToGame']
+        );
+
+        $this->app->post(
+            '/games/:gameId/players/:username/invite/',
             [$this, 'invitePlayerToGame']
         );
 
@@ -136,7 +142,45 @@ class PreGameRouter extends BaseRouter {
     }
 
     /**
-     * POST /games/:gameId/players/:username
+     * POST /games/:gameId/players/:username/
+     *
+     * @param int $gameId
+     * @param string $username
+     */
+    public function addPlayerToGame($gameId, $username) {
+        $game = new Game($gameId);
+        if (!$game->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Game does not exist')
+                ->send();
+            exit;
+        }
+
+        $player = new Player($username);
+        if (!$player->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
+                ->send();
+            exit;
+        }
+        if ($player->existsInGame($gameId)) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player already was invited')
+                ->send();
+            exit;
+        }
+
+        $game->addPlayer($player->id());
+        $game->playerConfirmed($player->id());
+
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->message('Player joined the game')
+            ->addData('game', $game->toArray())
+            ->send();
+    }
+
+    /**
+     * POST /games/:gameId/players/:username/invite/
      *
      * @param int $gameId
      * @param string $username
@@ -165,6 +209,17 @@ class PreGameRouter extends BaseRouter {
         }
 
         $game->addPlayer($player->id());
+
+        $gcm = new GCM();
+        $gcm->message()
+            ->addData(
+                'message',
+                'You\'ve been invited to '
+                . $game->name() . ' game. Click here to join.'
+            )
+            ->addData('gameId', $game->id())
+            ->addRegistrationId($game->currentPlayer()->gcmRegId());
+        $gcm->sendMessage();
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->message('Player was invited to game')
