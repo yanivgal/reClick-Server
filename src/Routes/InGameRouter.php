@@ -39,7 +39,7 @@ class InGameRouter extends BaseRouter {
         $this->checkExistence($game, $player);
 
         $previousPlayer = $game->previousPlayer();
-        $game->removePlayer($username);
+        $game->removePlayer($player->id());
         $players = $game->players();
 
         $gcm = new GCM();
