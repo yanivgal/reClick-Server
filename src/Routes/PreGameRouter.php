@@ -257,7 +257,7 @@ class PreGameRouter extends BaseRouter {
     }
 
     /**
-     * PUT /games/:gameId/players/:username
+     * PUT /games/:gameId/players/:username/
      *
      * @param int $gameId
      * @param string $username
@@ -295,7 +295,7 @@ class PreGameRouter extends BaseRouter {
     }
 
     /**
-     * PUT /games/:gameId/start
+     * PUT /games/:gameId/start/
      *
      * @param int $gameId
      */
