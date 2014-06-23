@@ -174,6 +174,7 @@ class Game extends BaseController {
             'description' => $this->description(),
             'numOfPlayers' => $this->numOfPlayers(),
             'players' => $this->players(),
+            'sequence' => $this->sequence(),
             'started' => $this->started()
         ];
         return $game;
