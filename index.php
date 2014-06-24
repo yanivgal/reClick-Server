@@ -9,7 +9,7 @@ new \reClick\Framework\Bootstrap();
 
 $app->post('/', function() use ($app) {
 
-    $player = new \reClick\Controllers\Players\Player('e');
+    $player = new \reClick\Controllers\Players\Player('q');
     $regId = $player->gcmRegId();
 
 //    print $regId;exit;

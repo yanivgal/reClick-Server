@@ -95,7 +95,7 @@ class Game extends BaseController {
 
     public function start() {
         $this->model->start($this->id);
-        $this->turn(1);
+//        $this->turn(1);
         $this->playersInGames->removeNotConfirmedPlayers($this->id);
     }
 

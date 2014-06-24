@@ -173,6 +173,9 @@ class PreGameRouter extends BaseRouter {
         $game->addPlayer($player->id());
         $game->playerConfirmed($player->id());
 
+        $playerTurn = $player->turnInGame($game->id());
+        $game->turn($playerTurn);
+
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->message('Player joined the game')
             ->addData('game', $game->toArray())
