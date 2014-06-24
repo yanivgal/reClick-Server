@@ -218,6 +218,7 @@ class PreGameRouter extends BaseRouter {
                 . $game->name() . ' game. Click here to join.'
             )
             ->addData('gameId', $game->id())
+            ->addData('sequence', $game->sequence())
             ->addRegistrationId($game->currentPlayer()->gcmRegId());
         $gcm->sendMessage();
 

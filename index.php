@@ -9,12 +9,10 @@ new \reClick\Framework\Bootstrap();
 
 $app->post('/', function() use ($app) {
 
-    $regId = $app->request->post('regId');
+    $player = new \reClick\Controllers\Players\Player('e');
+    $regId = $player->gcmRegId();
 
-    if (!isset($regId)) {
-        file_put_contents('./res', 'Does not exist');
-        return;
-    }
+//    print $regId;exit;
 
     $gcm = new GCM();
 
