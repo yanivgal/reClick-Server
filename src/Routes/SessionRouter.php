@@ -56,6 +56,12 @@ class SessionRouter extends BaseRouter {
                 $vars['gcmRegId']
             );
         } catch (\PDOException $e) {
+            if ($e->getCode() == 23000) {
+                (new ResponseMessage(ResponseMessage::STATUS_ERROR))
+                    ->message('This username is already taken')
+                    ->send();
+                exit;
+            }
             (new ResponseMessage(ResponseMessage::STATUS_ERROR))
                 ->message($e->getMessage())
                 ->send();
