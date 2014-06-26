@@ -32,7 +32,7 @@ class SessionRouter extends BaseRouter {
         );
 
         $this->app->post(
-            '/players/:username/location',
+            '/players/:username/location/',
             [$this, 'setPlayerLocation']
         );
     }
@@ -118,6 +118,11 @@ class SessionRouter extends BaseRouter {
             ->send();
     }
 
+    /**
+     * GET /players/:username/
+     *
+     * @param string $username
+     */
     public function getPlayerInfo($username) {
         $player = new Player($username);
         if (!$player->exists()) {
@@ -132,6 +137,11 @@ class SessionRouter extends BaseRouter {
             ->send();
     }
 
+    /**
+     * POST /players/:username/location/
+     *
+     * @param string $username
+     */
     public function setPlayerLocation($username) {
         $app = Slim::getInstance();
 
