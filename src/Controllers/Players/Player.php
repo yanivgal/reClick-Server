@@ -64,6 +64,14 @@ class Player extends BaseController {
     }
 
     /**
+     * @param string $location
+     * @return int|string
+     */
+    public function location($location = null) {
+        return $this->model->location($this->id, $location);
+    }
+
+    /**
      * @param string $gcmRegId
      * @return int|string
      */
@@ -118,5 +126,17 @@ class Player extends BaseController {
     public function alreadyConfirmed($gameId) {
         return $this->playersInGames->getConfirmation($this->id, $gameId)
             ? true : false;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            'id' => $this->id,
+            'username' => $this->username(),
+            'nickname' => $this->nickname(),
+            'location' => $this->location()
+        ];
     }
 } 

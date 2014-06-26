@@ -2,6 +2,7 @@
 
 namespace reClick\Routes;
 
+use Guzzle\Http\Client;
 use Slim\Slim;
 use reClick\Controllers\Players\Player;
 use reClick\Controllers\Players\Players;
@@ -14,14 +15,25 @@ class SessionRouter extends BaseRouter {
     }
 
     protected function initializeRoutes() {
+
+        $this->app->get(
+            '/players/:username/',
+            [$this, 'getPlayerInfo']
+        );
+
         $this->app->post(
             '/sign-up/',
-            ['reClick\Routes\SessionRouter', 'signUp']
+            [$this, 'signUp']
         );
 
         $this->app->post(
             '/login/?(hash/:hash/?)',
-            ['reClick\Routes\SessionRouter', 'login']
+            [$this, 'login']
+        );
+
+        $this->app->post(
+            '/players/:username/location',
+            [$this, 'setPlayerLocation']
         );
     }
 
@@ -103,6 +115,61 @@ class SessionRouter extends BaseRouter {
             ->message('Hello ' . $player->nickname())
             ->addData('username', $player->username())
             ->addData('nickname', $player->nickname())
+            ->send();
+    }
+
+    public function getPlayerInfo($username) {
+        $player = new Player($username);
+        if (!$player->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
+                ->send();
+            exit;
+        }
+
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->data($player->toArray())
+            ->send();
+    }
+
+    public function setPlayerLocation($username) {
+        $app = Slim::getInstance();
+
+        $player = new Player($username);
+        if (!$player->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
+                ->send();
+            exit;
+        }
+
+        $vars = parent::initJsonVars(
+            $app->request->getBody(),
+            ['latitude', 'longitude']
+        );
+
+        $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='
+            . $vars['latitude'] . ',' . $vars['longitude']
+            . '&sensor=false';
+
+        $response = (new Client())
+            ->get($url)
+            ->send();
+
+        if ($response->getStatusCode() != 200) {
+            (new ResponseMessage(ResponseMessage::STATUS_ERROR))
+                ->message($response->getMessage())
+                ->send();
+            exit;
+        }
+
+        $location = $response->json()['results'][0]['formatted_address'];
+
+        $player->location($location);
+
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->message('Location set')
+            ->data($player->toArray())
             ->send();
     }
 }

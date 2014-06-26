@@ -9,16 +9,19 @@ new \reClick\Framework\Bootstrap();
 
 $app->post('/', function() use ($app) {
 
-    $player = new \reClick\Controllers\Players\Player('q');
+    $player = new \reClick\Controllers\Players\Player('a');
     $regId = $player->gcmRegId();
 
 //    print $regId;exit;
 
+    $game = new \reClick\Controllers\Games\Game(63);
+
     $gcm = new GCM();
 
     $gcm->message()
-        ->addData('opponent_name', 'Yaniv Gal')
-        ->addData('time', '15:10')
+        ->addData('message', 'Yaniv Gal')
+        ->addData('gameId', '64')
+        ->addData('sequence', '1,2,3')
         ->addRegistrationId($regId);
 
     $response = $gcm->sendMessage();

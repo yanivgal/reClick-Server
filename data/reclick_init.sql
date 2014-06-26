@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2014 at 08:00 PM
+-- Generation Time: Jun 26, 2014 at 01:42 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `turn` int(4) DEFAULT NULL,
   `started` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -51,11 +51,12 @@ CREATE TABLE IF NOT EXISTS `players` (
   `username` varchar(25) NOT NULL,
   `password` varchar(64) NOT NULL,
   `nickname` varchar(25) NOT NULL,
+  `location` varchar(250) DEFAULT NULL,
   `gcm_reg_id` varchar(4096) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   FULLTEXT KEY `gcm_reg_id` (`gcm_reg_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

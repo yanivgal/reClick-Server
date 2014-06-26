@@ -215,6 +215,7 @@ class PreGameRouter extends BaseRouter {
 
         $gcm = new GCM();
         $gcm->message()
+            ->addData('type', "invite")
             ->addData(
                 'message',
                 'You\'ve been invited to '

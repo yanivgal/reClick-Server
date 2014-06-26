@@ -49,7 +49,7 @@ class PlayerModel extends BaseModel {
 
     /**
      * @param int $id
-     * @param string|null $username
+     * @param string $username
      * @return mixed
      */
     public function username($id, $username = null) {
@@ -58,7 +58,7 @@ class PlayerModel extends BaseModel {
 
     /**
      * @param int $id
-     * @param string|null $password
+     * @param string $password
      * @return mixed
      */
     public function password($id, $password = null) {
@@ -67,7 +67,7 @@ class PlayerModel extends BaseModel {
 
     /**
      * @param int $id
-     * @param string|null $nickname
+     * @param string $nickname
      * @return mixed
      */
     public function nickname($id, $nickname = null) {
@@ -76,7 +76,16 @@ class PlayerModel extends BaseModel {
 
     /**
      * @param int $id
-     * @param string|null $gcmRegId
+     * @param string $location
+     * @return mixed
+     */
+    public function location($id, $location = null) {
+        return $this->getSet($id, 'location', $location);
+    }
+
+    /**
+     * @param int $id
+     * @param string $gcmRegId
      * @return mixed
      */
     public function gcmRegId($id, $gcmRegId = null) {
