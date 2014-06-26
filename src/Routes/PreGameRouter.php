@@ -26,6 +26,11 @@ class PreGameRouter extends BaseRouter {
             [$this, 'getGame']
         );
 
+        $this->app->get(
+            '/players/:username/games/',
+            [$this, 'getPlayerGames']
+        );
+
         $this->app->post(
             '/games/',
             [$this, 'createGame']
@@ -66,27 +71,38 @@ class PreGameRouter extends BaseRouter {
         $vars = parent::initGetVars(
             $app->request->get(),
             [],
-            ['username']
+            ['type', 'butUsername']
         );
 
-        if (!isset($vars['username'])) {
+        if (isset($vars['type']) && $vars['type'] == 'open') {
+            if (isset($vars['butUsername'])) {
+
+                $player = new Player($vars['butUsername']);
+                if (!$player->exists()) {
+                    (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                        ->message('Player does not exist')
+                        ->send();
+                    exit;
+                }
+
+                (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+                    ->addData(
+                        'games',
+                        (new Games())->getOpenGamesBut($player->id()))
+                    ->send();
+                exit;
+            }
+
             (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
                 ->addData('games', (new Games())->getOpenGames())
                 ->send();
             exit;
         }
 
-        $player = new Player($vars['username']);
-        if (!$player->exists()) {
-            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
-                ->message('Player does not exist')
-                ->send();
-            exit;
-        }
-
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
-            ->addData('games', $player->games())
+            ->addData('games', (new Games())->getAllGames())
             ->send();
+        exit;
     }
 
     /**
@@ -107,6 +123,26 @@ class PreGameRouter extends BaseRouter {
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())
             ->send();
+    }
+
+    /**
+     * GET /players/:username/games
+     *
+     * @param string $username
+     */
+    public function getPlayerGames($username) {
+        $player = new Player($username);
+        if (!$player->exists()) {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Player does not exist')
+                ->send();
+            exit;
+        }
+
+        (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
+            ->addData('games', $player->games())
+            ->send();
+        exit;
     }
 
     /**

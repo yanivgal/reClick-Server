@@ -40,8 +40,28 @@ class GamesModel extends BaseModel {
     public function getOpenGames() {
         return $this->db->select(
             $this->table,
-            ['id', 'name', 'description', 'num_of_players as numOfPlayers'],
+            ['id'],
             ['started' => 0]
+        )->fetchAll();
+    }
+
+    /**
+     * @param int $playerId
+     * @return array
+     */
+    public function getOpenGamesBut($playerId) {
+        return $this->db->query(
+            'SELECT g.id
+             FROM   games g
+                    INNER JOIN (SELECT game_id
+                                FROM   players_in_games
+                                WHERE  game_id NOT IN (SELECT game_id
+                                                       FROM   players_in_games
+                                                       WHERE  player_id = ?)
+                                GROUP  BY game_id) tmp
+                            ON g.id = tmp.game_id
+             WHERE  g.started = 0 ',
+            [$playerId]
         )->fetchAll();
     }
 

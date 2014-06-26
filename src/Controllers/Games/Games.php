@@ -45,6 +45,18 @@ class Games {
     }
 
     /**
+     * @param int $playerId
+     * @return array
+     */
+    public function getOpenGamesBut($playerId) {
+        $games = $this->model->getOpenGamesBut($playerId);
+        foreach ($games as $i => $game) {
+            $games[$i] = (new Game($game['id']))->toArray();
+        }
+        return $games;
+    }
+
+    /**
      * @return int
      */
     public function deleteAllGames() {
