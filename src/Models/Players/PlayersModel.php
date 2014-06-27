@@ -35,4 +35,15 @@ class PlayersModel extends BaseModel {
         );
     }
 
+    /**
+     * @return array
+     */
+    public function getAllPlayers() {
+        return $this->db->select(
+            $this->table,
+            ['id'],
+            []
+        )->fetchAll();
+    }
+
 } 

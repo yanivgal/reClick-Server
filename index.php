@@ -30,7 +30,23 @@ $app->post('/', function() use ($app) {
 });
 
 $app->get('/', function() use ($app) {
+    $gcm = new GCM();
+    $gcm->message()
+        ->addData('type', 'gameCreatedCommand')
+        ->addData('id', "1")
+        ->addData('name', "Game Added Name")
+        ->addData('description', "Game Added Description")
+        ->addData('sequence', "1")
+        ->addData('started', '1');
 
+    $players = new \reClick\Controllers\Players\Players();
+    $players = $players->getAllPlayers();
+    foreach ($players as $player) {
+        $player = new \reClick\Controllers\Players\Player($player['id']);
+        $gcm->message()->addRegistrationId($player->gcmRegId());
+    }
+
+    $gcm->sendMessage();
 });
 
 $app->delete('/', function() use ($app) {

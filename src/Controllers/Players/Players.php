@@ -46,4 +46,11 @@ class Players {
 
         return new Player($id);
     }
+
+    /**
+     * @return array
+     */
+    public function getAllPlayers() {
+        return $this->model->getAllPlayers();
+    }
 } 

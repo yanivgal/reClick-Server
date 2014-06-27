@@ -2,6 +2,7 @@
 
 namespace reClick\Routes;
 
+use reClick\Controllers\Players\Players;
 use reClick\GCM\GCM;
 use Slim\Slim;
 use reClick\Controllers\Players\Player;
@@ -171,6 +172,35 @@ class PreGameRouter extends BaseRouter {
         );
         $game->addPlayer($player->id());
         $game->playerConfirmed($player->id());
+
+        $gcm = new GCM();
+        $gcm->message()
+            ->addData('type', 'gameCreatedCreatorCommand')
+            ->addData('id', $game->id())
+            ->addData('name', $game->name())
+            ->addData('description', $game->description())
+            ->addData('sequence', $game->sequence())
+            ->addData('started', $game->started() ? '1' : '0');
+        $gcm->message()->addRegistrationId($player->gcmRegId());
+        $gcm->sendMessage();
+
+        $gcm = new GCM();
+        $gcm->message()
+            ->addData('type', 'gameCreatedCommand')
+            ->addData('id', $game->id())
+            ->addData('name', $game->name())
+            ->addData('description', $game->description())
+            ->addData('sequence', $game->sequence())
+            ->addData('started', $game->started() ? '1' : '0');
+        $players = new Players();
+        $players = $players->getAllPlayers();
+        foreach ($players as $p) {
+            if ($p['id'] != $player->id()) {
+                $p = new Player($p['id']);
+                $gcm->message()->addRegistrationId($p->gcmRegId());
+            }
+        }
+        $gcm->sendMessage();
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->addData('game', $game->toArray())

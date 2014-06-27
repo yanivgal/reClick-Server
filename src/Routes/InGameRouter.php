@@ -44,7 +44,7 @@ class InGameRouter extends BaseRouter {
 
         $gcm = new GCM();
         $gcm->message()
-            ->addData('type', 'fail')
+            ->addData('type', 'playerFailedCommand')
             ->addData(
                 'message',
                 $player->nickname() . ' was unable to repeat '
@@ -88,7 +88,7 @@ class InGameRouter extends BaseRouter {
 
         $gcm = new GCM();
         $gcm->message()
-            ->addData('type', 'move')
+            ->addData('type', 'playerMadeHisMove')
             ->addData(
                 'message',
                 $player->nickname() . ' played his move, now it\' your turn '
