@@ -173,25 +173,31 @@ class PreGameRouter extends BaseRouter {
         $game->addPlayer($player->id());
         $game->playerConfirmed($player->id());
 
+        $gameId = $game->id();
+        $gameName = $game->name();
+        $gameDescription = $game->description();
+        $gameSequence = $game->sequence() ? $game->sequence() : 'null';
+        $gameStarted = $game->started() ? '1' : '0';
+
         $gcm = new GCM();
         $gcm->message()
             ->addData('type', 'gameCreatedCreatorCommand')
-            ->addData('id', $game->id())
-            ->addData('name', $game->name())
-            ->addData('description', $game->description())
-            ->addData('sequence', $game->sequence())
-            ->addData('started', $game->started() ? '1' : '0');
+            ->addData('id', $gameId)
+            ->addData('name', $gameName)
+            ->addData('description', $gameDescription)
+            ->addData('sequence', $gameSequence)
+            ->addData('started', $gameStarted);
         $gcm->message()->addRegistrationId($player->gcmRegId());
         $gcm->sendMessage();
 
         $gcm = new GCM();
         $gcm->message()
             ->addData('type', 'gameCreatedCommand')
-            ->addData('id', $game->id())
-            ->addData('name', $game->name())
-            ->addData('description', $game->description())
-            ->addData('sequence', $game->sequence())
-            ->addData('started', $game->started() ? '1' : '0');
+            ->addData('id', $gameId)
+            ->addData('name', $gameName)
+            ->addData('description', $gameDescription)
+            ->addData('sequence', $gameSequence)
+            ->addData('started', $gameStarted);
         $players = new Players();
         $players = $players->getAllPlayers();
         foreach ($players as $p) {
