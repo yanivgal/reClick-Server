@@ -88,7 +88,7 @@ class InGameRouter extends BaseRouter {
 
         $gcm = new GCM();
         $gcm->message()
-            ->addData('type', 'playerMadeHisMove')
+            ->addData('type', 'playerMadeHisMoveCommand')
             ->addData(
                 'message',
                 $player->nickname() . ' played his move, now it\' your turn '
