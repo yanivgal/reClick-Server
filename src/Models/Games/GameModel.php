@@ -94,4 +94,15 @@ class GameModel extends BaseModel {
             (int) $this->numOfPlayers($id) - 1
         );
     }
+
+    /**
+     * @param int $id
+     * @return int
+     */
+    public function deleteGame($id) {
+        return $this->db->delete(
+            $this->table,
+            ['id' => $id]
+        );
+    }
 } 

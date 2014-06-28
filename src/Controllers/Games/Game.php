@@ -188,6 +188,13 @@ class Game extends BaseController {
         $this->setNextTurn();
     }
 
+    /**
+     * @return int
+     */
+    public function deleteGame() {
+        return $this->model->deleteGame($this->id);
+    }
+
     private function setNextTurn() {
         $currentTurn = $this->turn();
         $nextTurn = $currentTurn == $this->maxTurn() ? 1 : $currentTurn + 1;

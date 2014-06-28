@@ -51,7 +51,7 @@ $app->get('/', function() use ($app) {
     $player = new \reClick\Controllers\Players\Player('y');
     $gcm = new GCM();
     $gcm->message()
-        ->addData('type', 'gameCreatedCreatorCommand')
+        ->addData('type', 'gameCreatedCommand')
         ->addData('id', "1")
         ->addData('name', "Game Added Name")
         ->addData('description', "Game Added Description")

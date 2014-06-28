@@ -42,22 +42,40 @@ class InGameRouter extends BaseRouter {
         $game->removePlayer($player->id());
         $players = $game->players();
 
-        $gcm = new GCM();
-        $gcm->message()
-            ->addData('type', 'playerFailedCommand')
-            ->addData(
-                'message',
-                $player->nickname() . ' was unable to repeat '
-                . $previousPlayer->nickname()
-                . 's sequence and been put out of his misery'
-            );
 
-        foreach ($players as $player) {
-            $player = new Player($player['id']);
+        if ($game->numOfPlayers() == 1) {
+            $player = $game->currentPlayer();
+
+            $gcm = new GCM();
+            $gcm->message()
+                ->addData('type', 'youWonCommand')
+                ->addData(
+                    'message',
+                    'Congratulations, you won "' . $game->name() . '" game!'
+                );
+
             $gcm->message()->addRegistrationId($player->gcmRegId());
-        }
+            $gcm->sendMessage();
 
-        $gcm->sendMessage();
+            $game->deleteGame();
+        } else {
+            $gcm = new GCM();
+            $gcm->message()
+                ->addData('type', 'playerFailedCommand')
+                ->addData(
+                    'message',
+                    $player->nickname() . ' was unable to repeat '
+                    . $previousPlayer->nickname()
+                    . '\'s sequence and been put out of his misery'
+                );
+
+            foreach ($players as $player) {
+                $player = new Player($player['id']);
+                $gcm->message()->addRegistrationId($player->gcmRegId());
+            }
+
+            $gcm->sendMessage();
+        }
 
         (new ResponseMessage(ResponseMessage::STATUS_SUCCESS))
             ->message('Player removed from game')
