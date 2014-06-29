@@ -109,7 +109,7 @@ class InGameRouter extends BaseRouter {
             ->addData('type', 'playerMadeHisMoveCommand')
             ->addData(
                 'message',
-                $player->nickname() . ' played his move, now it\' your turn '
+                $player->nickname() . ' played his move, now it\'s your turn '
             )
             ->addData('gameId', $game->id())
             ->addData('sequence', $game->sequence())

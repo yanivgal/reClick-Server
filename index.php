@@ -51,12 +51,10 @@ $app->get('/', function() use ($app) {
     $player = new \reClick\Controllers\Players\Player('y');
     $gcm = new GCM();
     $gcm->message()
-        ->addData('type', 'gameCreatedCommand')
-        ->addData('id', "1")
-        ->addData('name', "Game Added Name")
-        ->addData('description', "Game Added Description")
-        ->addData('sequence', "1")
-        ->addData('started', '1');
+        ->addData('type', 'playerMadeHisMoveCommand')
+        ->addData('message', "Sample message")
+        ->addData('gameId', "44")
+        ->addData('sequence', "1,2,3");
     $gcm->message()->addRegistrationId($player->gcmRegId());
     $gcm->sendMessage();
 });
