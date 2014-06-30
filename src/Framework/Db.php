@@ -28,7 +28,7 @@ class Db {
      *
      * @param string $queryString
      * @param array $values
-     * @return mixed
+     * @return Db|mixed
      */
     public function query($queryString, $values = []) {
         $db = $this->connect();

@@ -142,11 +142,23 @@ class PlayersInGamesModel extends BaseModel {
      * @return array
      */
     public function players($gameId) {
-        return $this->db->select(
-            $this->table,
-            ['player_id as id', 'turn', 'confirmed'],
-            ['game_id' => $gameId]
+        return $this->db->query(
+            'SELECT pg.player_id AS id,
+                    p.nickname AS nickname,
+                    p.location AS location,
+                    pg.turn AS turn,
+                    pg.confirmed as confirmed
+             FROM   players_in_games pg
+                    INNER JOIN players p
+                            ON p.id = pg.player_id
+             WHERE  game_id = ?',
+            [$gameId]
         )->fetchAll();
+//        return $this->db->select(
+//            $this->table,
+//            ['player_id as id', 'turn', 'confirmed'],
+//            ['game_id' => $gameId]
+//        )->fetchAll();
     }
 
     /**
