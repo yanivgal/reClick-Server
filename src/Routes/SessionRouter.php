@@ -179,6 +179,13 @@ class SessionRouter extends BaseRouter {
             exit;
         }
 
+        if ($response->json()['status'] == 'ZERO_RESULTS') {
+            (new ResponseMessage(ResponseMessage::STATUS_FAIL))
+                ->message('Can\'t find location')
+                ->send();
+            exit;
+        }
+
         $location = $response->json()['results'][0]['formatted_address'];
 
         $player->location($location);
