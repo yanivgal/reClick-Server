@@ -48,7 +48,7 @@ $app->get('/', function() use ($app) {
 //
 //    $gcm->sendMessage();
 
-    $player = new \reClick\Controllers\Players\Player('y');
+    $player = new \reClick\Controllers\Players\Player('a');
     $gcm = new GCM();
     $gcm->message()
         ->addData('type', 'playerMadeHisMoveCommand')
