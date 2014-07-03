@@ -42,7 +42,6 @@ class InGameRouter extends BaseRouter {
         $game->removePlayer($player->id());
         $players = $game->players();
 
-
         if ($game->numOfPlayers() == 1) {
             $player = $game->currentPlayer();
 
@@ -54,7 +53,7 @@ class InGameRouter extends BaseRouter {
                     'Congratulations, you won "' . $game->name() . '" game!'
                 );
 
-            $gcm->message()->addRegistrationId($player->gcmRegId());
+            $gcm->message()->addRegistrationId($previousPlayer->gcmRegId());
             $gcm->sendMessage();
 
             $game->deleteGame();
