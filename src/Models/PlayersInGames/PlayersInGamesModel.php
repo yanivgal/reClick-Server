@@ -146,6 +146,7 @@ class PlayersInGamesModel extends BaseModel {
             'SELECT pg.player_id AS id,
                     p.nickname AS nickname,
                     p.location AS location,
+                    p.username AS username,
                     pg.turn AS turn,
                     pg.confirmed as confirmed
              FROM   players_in_games pg
